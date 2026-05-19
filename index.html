@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#1a0a0f" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="description" content="Uns-Zeit – Zweisamkeit für Paare" />
+  <title>Uns-Zeit 💫</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0f0609;
+      --bg2: #1a0c10;
+      --rose: #c4637a;
+      --rose-light: #e8899e;
+      --rose-pale: #f5c6d0;
+      --gold: #c9a96e;
+      --gold-light: #e8c98a;
+      --cream: #f5ede6;
+      --text: #f0e6ea;
+      --text-muted: #9a7d85;
+      --card: rgba(255,255,255,0.04);
+      --card-border: rgba(196,99,122,0.2);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Jost', sans-serif; background: var(--bg); color: var(--text); min-height: 100dvh; overflow-x: hidden; }
+    body::before {
+      content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 20% 20%, rgba(196,99,122,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 80% 80%, rgba(201,169,110,0.05) 0%, transparent 60%);
+    }
+
+    /* Particles */
+    .particles { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .particle { position: absolute; width: 2px; height: 2px; border-radius: 50%; opacity: 0; animation: float-up linear infinite; }
+    @keyframes float-up {
+      0% { opacity: 0; transform: translateY(0) scale(0); }
+      10% { opacity: 0.5; transform: translateY(-10px) scale(1); }
+      90% { opacity: 0.15; }
+      100% { opacity: 0; transform: translateY(-120vh) scale(0.5); }
+    }
+
+    /* Nav */
+    nav {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-around; align-items: center;
+      padding: 10px 0 max(10px, env(safe-area-inset-bottom));
+      background: rgba(8,3,5,0.92); backdrop-filter: blur(24px);
+      border-top: 1px solid rgba(196,99,122,0.12);
+    }
+    .nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; padding: 5px 10px; border-radius: 10px; transition: all 0.3s ease; opacity: 0.4; }
+    .nav-item.active { opacity: 1; }
+    .nav-item:active { transform: scale(0.88); }
+    .nav-icon { font-size: 19px; line-height: 1; }
+    .nav-label { font-size: 9px; font-weight: 300; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-muted); }
+    .nav-item.active .nav-label { color: var(--rose-light); }
+    .nav-item.active .nav-icon { filter: drop-shadow(0 0 8px rgba(196,99,122,0.6)); }
+
+    /* Pages */
+    .page { display: none; min-height: 100dvh; padding-bottom: 90px; position: relative; z-index: 1; animation: fadeIn 0.35s ease; }
+    .page.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .fade-section { opacity: 0; transform: translateY(16px); transition: opacity 0.5s ease, transform 0.5s ease; }
+    .fade-section.visible { opacity: 1; transform: translateY(0); }
+
+    /* Common */
+    .page-header { padding: 56px 24px 18px; text-align: center; }
+    .page-header h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.9rem, 8vw, 2.8rem); font-weight: 300; color: var(--cream); line-height: 1.2; }
+    .page-header h1 span { color: var(--rose-light); font-style: italic; }
+    .page-header p { margin-top: 7px; font-size: 13px; font-weight: 200; color: var(--text-muted); letter-spacing: 0.04em; }
+    .section-title { padding: 18px 24px 9px; font-size: 9px; font-weight: 300; letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-muted); }
+
+    /* HOME */
+    .home-hero { padding: 50px 24px 22px; text-align: center; }
+    .home-logo { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.8rem, 12vw, 5rem); font-weight: 300; color: var(--cream); line-height: 1; letter-spacing: -0.02em; }
+    .home-logo .heart { display: inline-block; color: var(--rose); animation: heartbeat 2.5s ease-in-out infinite; filter: drop-shadow(0 0 12px rgba(196,99,122,0.5)); }
+    @keyframes heartbeat { 0%,100%{transform:scale(1)} 15%{transform:scale(1.15)} 30%{transform:scale(1)} 45%{transform:scale(1.08)} 60%{transform:scale(1)} }
+    .home-tagline { margin-top: 9px; font-size: 12px; font-weight: 200; letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-muted); }
+
+    .streak-card { margin: 14px 24px; padding: 20px; background: linear-gradient(135deg,rgba(196,99,122,0.1),rgba(201,169,110,0.07)); border: 1px solid rgba(196,99,122,0.22); border-radius: 20px; display: flex; align-items: center; gap: 16px; }
+    .streak-flame { font-size: 42px; animation: flicker 1.5s ease-in-out infinite alternate; }
+    @keyframes flicker { from{filter:drop-shadow(0 0 8px rgba(201,169,110,0.4));transform:rotate(-2deg)} to{filter:drop-shadow(0 0 16px rgba(201,169,110,0.7));transform:rotate(2deg)} }
+    .streak-info h3 { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 400; color: var(--gold-light); }
+    .streak-info p { font-size: 12px; font-weight: 200; color: var(--text-muted); }
+
+    .daily-question { margin: 12px 24px; padding: 20px; background: linear-gradient(135deg,rgba(201,169,110,0.07),rgba(196,99,122,0.04)); border: 1px solid rgba(201,169,110,0.18); border-radius: 18px; cursor: pointer; transition: all 0.3s ease; }
+    .daily-question:active { transform: scale(0.98); }
+    .daily-question .label { font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-bottom: 9px; }
+    .daily-question .question { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 300; font-style: italic; color: var(--cream); line-height: 1.5; }
+    .daily-question .tap-hint { margin-top: 9px; font-size: 11px; font-weight: 200; color: var(--text-muted); }
+
+    .quick-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 0 24px; }
+    .quick-card { padding: 17px; background: var(--card); border: 1px solid var(--card-border); border-radius: 16px; cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden; }
+    .quick-card::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,rgba(196,99,122,0.1),transparent); opacity:0; transition:opacity 0.3s; }
+    .quick-card:active::before { opacity:1; }
+    .quick-card:active { transform: scale(0.97); }
+    .quick-card .icon { font-size: 25px; margin-bottom: 6px; }
+    .quick-card h4 { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 400; color: var(--cream); }
+    .quick-card p { margin-top: 3px; font-size: 11px; font-weight: 200; color: var(--text-muted); }
+
+    /* IDEAS */
+    .category-tabs { display:flex; gap:7px; padding:0 24px 13px; overflow-x:auto; scrollbar-width:none; }
+    .category-tabs::-webkit-scrollbar{display:none}
+    .tab { flex-shrink:0; padding:7px 14px; border-radius:20px; border:1px solid rgba(196,99,122,0.17); background:transparent; color:var(--text-muted); font-family:'Jost',sans-serif; font-size:12px; font-weight:300; letter-spacing:0.03em; cursor:pointer; transition:all 0.3s ease; }
+    .tab.active { background:rgba(196,99,122,0.17); border-color:var(--rose); color:var(--rose-light); }
+    .shuffle-btn { display:flex; align-items:center; justify-content:center; gap:8px; margin:12px 24px 12px; padding:12px; background:linear-gradient(135deg,rgba(196,99,122,0.12),rgba(201,169,110,0.07)); border:1px solid rgba(196,99,122,0.27); border-radius:13px; color:var(--rose-light); font-family:'Jost',sans-serif; font-size:13px; font-weight:300; letter-spacing:0.06em; cursor:pointer; transition:all 0.3s ease; }
+    .shuffle-btn:active { transform:scale(0.97); }
+    .ideas-grid { display:flex; flex-direction:column; gap:10px; padding:0 24px; }
+    .idea-card { padding:17px; background:var(--card); border:1px solid var(--card-border); border-radius:15px; display:flex; align-items:flex-start; gap:13px; cursor:pointer; transition:all 0.3s ease; position:relative; overflow:hidden; }
+    .idea-card::after { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:linear-gradient(to bottom,var(--rose),var(--gold)); opacity:0; transition:opacity 0.3s; }
+    .idea-card:active::after { opacity:1; }
+    .idea-card:active { transform:scale(0.99); background:rgba(255,255,255,0.05); }
+    .idea-emoji { font-size:28px; flex-shrink:0; }
+    .idea-content h4 { font-family:'Cormorant Garamond',serif; font-size:1.05rem; font-weight:400; color:var(--cream); }
+    .idea-content p { margin-top:3px; font-size:12px; font-weight:200; color:var(--text-muted); line-height:1.5; }
+    .idea-tags { display:flex; gap:5px; margin-top:7px; flex-wrap:wrap; }
+    .idea-tag { padding:3px 8px; background:rgba(196,99,122,0.09); border:1px solid rgba(196,99,122,0.14); border-radius:20px; font-size:10px; color:var(--rose-light); font-weight:200; }
+    .idea-tag.gold { background:rgba(201,169,110,0.09); border-color:rgba(201,169,110,0.18); color:var(--gold-light); }
+
+    /* CHALLENGES */
+    .challenge-hero { margin:0 24px 16px; padding:26px 20px; background:linear-gradient(135deg,rgba(196,99,122,0.12),rgba(201,169,110,0.07)); border:1px solid rgba(196,99,122,0.22); border-radius:20px; text-align:center; position:relative; overflow:hidden; }
+    .challenge-hero::before { content:'✨'; position:absolute; top:12px; right:14px; font-size:20px; opacity:0.4; }
+    .challenge-week { font-size:9px; letter-spacing:0.22em; text-transform:uppercase; color:var(--gold); margin-bottom:7px; }
+    .challenge-hero h2 { font-family:'Cormorant Garamond',serif; font-size:1.4rem; font-weight:400; color:var(--cream); margin-bottom:6px; }
+    .challenge-hero p { font-size:12px; font-weight:200; color:var(--text-muted); line-height:1.6; }
+    .challenge-btn { display:inline-block; margin-top:13px; padding:9px 21px; background:rgba(196,99,122,0.17); border:1px solid var(--rose); border-radius:20px; color:var(--rose-light); font-size:12px; font-weight:300; letter-spacing:0.06em; cursor:pointer; transition:all 0.3s ease; }
+    .challenge-btn:active { background:rgba(196,99,122,0.3); transform:scale(0.97); }
+    .challenges-list { display:flex; flex-direction:column; gap:8px; padding:0 24px; }
+    .challenge-item { padding:15px; background:var(--card); border:1px solid var(--card-border); border-radius:13px; display:flex; align-items:center; gap:13px; cursor:pointer; transition:all 0.3s ease; }
+    .challenge-item:active { transform:scale(0.98); }
+    .challenge-item.done { opacity:0.55; border-color:rgba(201,169,110,0.17); }
+    .challenge-check { width:27px; height:27px; border-radius:50%; border:2px solid rgba(196,99,122,0.33); display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:all 0.3s ease; font-size:13px; }
+    .challenge-item.done .challenge-check { background:rgba(201,169,110,0.17); border-color:var(--gold); color:var(--gold-light); }
+    .challenge-text h4 { font-family:'Cormorant Garamond',serif; font-size:1rem; font-weight:400; color:var(--cream); }
+    .challenge-text p { font-size:11px; font-weight:200; color:var(--text-muted); margin-top:2px; }
+
+    /* TIMER */
+    .timer-container { display:flex; flex-direction:column; align-items:center; padding:18px 24px; }
+    .timer-presets { display:flex; gap:8px; margin-bottom:20px; }
+    .timer-preset { padding:7px 14px; border-radius:20px; border:1px solid rgba(196,99,122,0.17); background:transparent; color:var(--text-muted); font-family:'Jost',sans-serif; font-size:13px; font-weight:300; cursor:pointer; transition:all 0.3s ease; }
+    .timer-preset.active { background:rgba(196,99,122,0.17); border-color:var(--rose); color:var(--rose-light); }
+    .timer-ring { position:relative; width:205px; height:205px; margin-bottom:24px; }
+    .timer-ring svg { position:absolute; inset:0; transform:rotate(-90deg); }
+    .ring-bg { fill:none; stroke:rgba(196,99,122,0.1); stroke-width:3; }
+    .ring-progress { fill:none; stroke:url(#ringGrad); stroke-width:3; stroke-linecap:round; transition:stroke-dashoffset 1s linear; }
+    .timer-display { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+    .timer-time { font-family:'Cormorant Garamond',serif; font-size:3.1rem; font-weight:300; color:var(--cream); letter-spacing:-0.02em; line-height:1; }
+    .timer-sub { font-size:11px; font-weight:200; color:var(--text-muted); letter-spacing:0.1em; margin-top:4px; }
+    .timer-controls { display:flex; gap:14px; align-items:center; }
+    .timer-btn { width:52px; height:52px; border-radius:50%; border:1px solid rgba(196,99,122,0.27); background:rgba(196,99,122,0.09); color:var(--rose-light); font-size:18px; cursor:pointer; transition:all 0.3s ease; display:flex; align-items:center; justify-content:center; }
+    .timer-btn.main { width:68px; height:68px; background:rgba(196,99,122,0.17); border-color:var(--rose); font-size:23px; box-shadow:0 0 26px rgba(196,99,122,0.17); }
+    .timer-btn:active { transform:scale(0.92); }
+    .moment-activities { display:grid; grid-template-columns:1fr 1fr; gap:9px; padding:0 24px; margin-top:7px; }
+    .moment-card { padding:14px; background:var(--card); border:1px solid var(--card-border); border-radius:13px; text-align:center; cursor:pointer; transition:all 0.3s ease; }
+    .moment-card:active { transform:scale(0.96); background:rgba(255,255,255,0.06); }
+    .moment-card .icon { font-size:21px; margin-bottom:5px; }
+    .moment-card h4 { font-family:'Cormorant Garamond',serif; font-size:0.95rem; font-weight:400; color:var(--cream); }
+    .moment-card p { font-size:11px; font-weight:200; color:var(--text-muted); margin-top:2px; }
+
+    /* ── EROTIC PAGE ── */
+    .heat-meter { margin:0 24px 18px; padding:19px 20px; background:linear-gradient(135deg,rgba(160,40,70,0.1),rgba(196,99,122,0.06)); border:1px solid rgba(196,99,122,0.21); border-radius:17px; }
+    .heat-meter-label { font-size:9px; letter-spacing:0.22em; text-transform:uppercase; color:var(--text-muted); margin-bottom:13px; }
+    .heat-label-row { display:flex; justify-content:space-between; margin-bottom:7px; }
+    .heat-label-row span { font-size:11px; font-weight:200; color:var(--text-muted); }
+    .heat-track { position:relative; height:6px; background:rgba(255,255,255,0.07); border-radius:3px; cursor:pointer; margin-bottom:14px; }
+    .heat-fill { height:100%; border-radius:3px; background:linear-gradient(to right,#c4637a,#e8899e,#f0a0b0); transition:width 0.2s ease; box-shadow:0 0 10px rgba(196,99,122,0.4); }
+    .heat-thumb { position:absolute; top:50%; transform:translate(-50%,-50%); width:17px; height:17px; border-radius:50%; background:var(--rose-light); border:2px solid var(--bg2); box-shadow:0 0 10px rgba(196,99,122,0.5); transition:left 0.2s ease; }
+    .heat-mood { font-family:'Cormorant Garamond',serif; font-size:1.05rem; font-weight:300; font-style:italic; color:var(--rose-pale); text-align:center; }
+
+    .erotic-tabs { display:flex; gap:7px; padding:0 24px 12px; overflow-x:auto; scrollbar-width:none; }
+    .erotic-tabs::-webkit-scrollbar{display:none}
+    .dice-btn { display:flex; align-items:center; justify-content:center; gap:8px; margin:12px 24px 12px; padding:12px; background:linear-gradient(135deg,rgba(160,40,70,0.14),rgba(139,107,158,0.09)); border:1px solid rgba(196,99,122,0.28); border-radius:13px; color:var(--rose-light); font-family:'Jost',sans-serif; font-size:13px; font-weight:300; letter-spacing:0.06em; cursor:pointer; transition:all 0.3s ease; }
+    .dice-btn:active { transform:scale(0.97); }
+    .erotic-grid { display:flex; flex-direction:column; gap:10px; padding:0 24px; }
+    .erotic-card { padding:19px; background:var(--card); border:1px solid rgba(160,60,80,0.19); border-radius:15px; cursor:pointer; transition:all 0.3s ease; position:relative; overflow:hidden; }
+    .erotic-card::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:linear-gradient(to bottom,#c4637a,#8b6b9e); opacity:0; transition:opacity 0.3s; }
+    .erotic-card:active::before { opacity:1; }
+    .erotic-card:active { transform:scale(0.99); }
+    .erotic-card-header { display:flex; align-items:center; gap:11px; margin-bottom:7px; }
+    .erotic-card-icon { font-size:27px; }
+    .erotic-card h4 { font-family:'Cormorant Garamond',serif; font-size:1.1rem; font-weight:400; color:var(--cream); }
+    .erotic-card p { font-size:12px; font-weight:200; color:var(--text-muted); line-height:1.6; }
+    .erotic-intensity { display:flex; align-items:center; gap:4px; margin-top:9px; }
+    .intensity-dot { width:6px; height:6px; border-radius:50%; background:rgba(196,99,122,0.2); }
+    .intensity-dot.filled { background:var(--rose); box-shadow:0 0 5px rgba(196,99,122,0.5); }
+
+    /* Spin overlay */
+    .spin-result { position:fixed; inset:0; z-index:300; background:rgba(0,0,0,0.86); backdrop-filter:blur(16px); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:36px 30px; opacity:0; pointer-events:none; transition:opacity 0.4s ease; }
+    .spin-result.show { opacity:1; pointer-events:all; }
+    .spin-result-emoji { font-size:60px; margin-bottom:18px; animation:popIn 0.5s cubic-bezier(0.175,0.885,0.32,1.275); }
+    @keyframes popIn { from{transform:scale(0);opacity:0} to{transform:scale(1);opacity:1} }
+    .spin-result-title { font-family:'Cormorant Garamond',serif; font-size:1.9rem; font-weight:300; color:var(--cream); text-align:center; margin-bottom:13px; }
+    .spin-result-text { font-size:14px; font-weight:200; color:var(--text-muted); text-align:center; line-height:1.7; max-width:310px; }
+    .spin-close { margin-top:28px; padding:11px 30px; background:rgba(196,99,122,0.17); border:1px solid var(--rose); border-radius:20px; color:var(--rose-light); font-family:'Jost',sans-serif; font-size:13px; font-weight:300; cursor:pointer; transition:all 0.3s ease; }
+    .spin-close:active { background:rgba(196,99,122,0.3); transform:scale(0.97); }
+
+    /* ── CONNECT PAGE ── */
+    .connect-status { margin:0 24px 18px; padding:26px 20px; background:linear-gradient(135deg,rgba(139,107,158,0.1),rgba(196,99,122,0.07)); border:1px solid rgba(139,107,158,0.21); border-radius:20px; text-align:center; }
+    .connect-avatars { display:flex; align-items:center; justify-content:center; gap:12px; margin-bottom:14px; }
+    .connect-avatar { width:52px; height:52px; border-radius:50%; background:linear-gradient(135deg,rgba(196,99,122,0.28),rgba(201,169,110,0.18)); border:2px solid rgba(196,99,122,0.28); display:flex; align-items:center; justify-content:center; font-size:22px; }
+    .connect-line { display:flex; align-items:center; gap:5px; }
+    .connect-dot { width:6px; height:6px; border-radius:50%; background:var(--rose); animation:pulse-dot 1.5s ease-in-out infinite; box-shadow:0 0 8px rgba(196,99,122,0.6); }
+    .connect-dot:nth-child(2){animation-delay:0.2s}
+    .connect-dot:nth-child(3){animation-delay:0.4s}
+    @keyframes pulse-dot { 0%,100%{opacity:0.3;transform:scale(0.8)} 50%{opacity:1;transform:scale(1)} }
+    .connect-status h3 { font-family:'Cormorant Garamond',serif; font-size:1.25rem; font-weight:300; color:var(--cream); margin-bottom:4px; }
+    .connect-status p { font-size:12px; font-weight:200; color:var(--text-muted); }
+
+    .connect-code-area { margin:0 24px 18px; padding:19px 20px; background:var(--card); border:1px solid var(--card-border); border-radius:17px; }
+    .connect-code-label { font-size:9px; letter-spacing:0.22em; text-transform:uppercase; color:var(--text-muted); margin-bottom:11px; }
+    .connect-code-display { font-family:'Cormorant Garamond',serif; font-size:2.4rem; font-weight:300; letter-spacing:0.4em; color:var(--rose-light); text-align:center; padding:9px 0; border-bottom:1px solid rgba(196,99,122,0.14); margin-bottom:13px; }
+    .connect-code-actions { display:flex; gap:9px; }
+    .connect-code-btn { flex:1; padding:10px; border-radius:11px; border:1px solid rgba(196,99,122,0.21); background:rgba(196,99,122,0.07); color:var(--rose-light); font-family:'Jost',sans-serif; font-size:12px; font-weight:300; letter-spacing:0.04em; cursor:pointer; transition:all 0.3s ease; text-align:center; }
+    .connect-code-btn:active { background:rgba(196,99,122,0.19); transform:scale(0.97); }
+
+    .pulse-grid { display:grid; grid-template-columns:1fr 1fr; gap:9px; padding:0 24px; }
+    .pulse-card { padding:17px 13px; background:var(--card); border:1px solid var(--card-border); border-radius:15px; text-align:center; cursor:pointer; transition:all 0.3s ease; position:relative; overflow:hidden; }
+    .pulse-card:active { transform:scale(0.94); }
+    .pulse-icon { font-size:30px; margin-bottom:5px; }
+    .pulse-card h4 { font-family:'Cormorant Garamond',serif; font-size:0.92rem; font-weight:400; color:var(--cream); }
+    .pulse-card p { font-size:10px; font-weight:200; color:var(--text-muted); margin-top:3px; }
+    .pulse-card.sending::after { content:''; position:absolute; inset:0; border-radius:15px; background:rgba(196,99,122,0.18); animation:pulse-flash 0.7s ease-out forwards; }
+    @keyframes pulse-flash { from{opacity:1} to{opacity:0} }
+
+    .messages-area { margin:0 24px 18px; background:var(--card); border:1px solid var(--card-border); border-radius:17px; overflow:hidden; }
+    .messages-header { padding:13px 17px 9px; border-bottom:1px solid rgba(196,99,122,0.1); font-size:9px; letter-spacing:0.22em; text-transform:uppercase; color:var(--text-muted); }
+    .messages-list { padding:13px 15px; display:flex; flex-direction:column; gap:9px; max-height:210px; overflow-y:auto; }
+    .msg { display:flex; align-items:flex-end; gap:7px; }
+    .msg.mine { flex-direction:row-reverse; }
+    .msg-avatar { width:26px; height:26px; border-radius:50%; font-size:13px; display:flex; align-items:center; justify-content:center; background:rgba(196,99,122,0.14); flex-shrink:0; }
+    .msg-bubble { max-width:75%; padding:8px 12px; border-radius:15px 15px 15px 4px; background:rgba(255,255,255,0.05); border:1px solid rgba(196,99,122,0.11); font-size:13px; font-weight:300; color:var(--text); line-height:1.4; }
+    .msg.mine .msg-bubble { background:rgba(196,99,122,0.11); border-color:rgba(196,99,122,0.19); border-radius:15px 15px 4px 15px; }
+    .msg-time { font-size:10px; color:var(--text-muted); margin-top:2px; }
+    .message-input-row { display:flex; gap:8px; padding:11px 15px; border-top:1px solid rgba(196,99,122,0.1); }
+    .message-input { flex:1; background:rgba(255,255,255,0.04); border:1px solid rgba(196,99,122,0.14); border-radius:9px; padding:9px 12px; color:var(--text); font-family:'Jost',sans-serif; font-size:13px; font-weight:300; outline:none; }
+    .message-input::placeholder { color:var(--text-muted); }
+    .message-send { width:38px; height:38px; border-radius:9px; background:rgba(196,99,122,0.17); border:1px solid rgba(196,99,122,0.28); color:var(--rose-light); font-size:15px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all 0.3s ease; }
+    .message-send:active { background:rgba(196,99,122,0.28); transform:scale(0.92); }
+
+    /* Modal */
+    .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.72); backdrop-filter:blur(10px); z-index:200; display:flex; align-items:flex-end; opacity:0; pointer-events:none; transition:opacity 0.3s ease; }
+    .modal-overlay.open { opacity:1; pointer-events:all; }
+    .modal { width:100%; background:var(--bg2); border-top:1px solid rgba(196,99,122,0.17); border-radius:24px 24px 0 0; padding:21px 24px max(24px,env(safe-area-inset-bottom)); transform:translateY(100%); transition:transform 0.4s cubic-bezier(0.32,0.72,0,1); max-height:82dvh; overflow-y:auto; }
+    .modal-overlay.open .modal { transform:translateY(0); }
+    .modal-handle { width:37px; height:4px; background:rgba(255,255,255,0.11); border-radius:2px; margin:0 auto 17px; }
+    .modal-title { font-family:'Cormorant Garamond',serif; font-size:1.45rem; font-weight:300; color:var(--cream); margin-bottom:5px; }
+    .modal-subtitle { font-size:12px; font-weight:200; color:var(--text-muted); margin-bottom:17px; line-height:1.6; }
+    .modal-body { font-size:14px; font-weight:300; color:var(--text); line-height:1.7; }
+    .modal-close { display:block; width:100%; margin-top:20px; padding:12px; background:rgba(196,99,122,0.11); border:1px solid rgba(196,99,122,0.24); border-radius:12px; color:var(--rose-light); font-family:'Jost',sans-serif; font-size:13px; font-weight:300; letter-spacing:0.05em; cursor:pointer; transition:all 0.3s ease; text-align:center; }
+    .modal-close:active { background:rgba(196,99,122,0.21); }
+
+    /* Toast */
+    .toast { position:fixed; top:20px; left:50%; transform:translateX(-50%) translateY(-80px); background:rgba(26,12,16,0.96); border:1px solid rgba(201,169,110,0.27); border-radius:11px; padding:10px 19px; font-size:13px; font-weight:300; color:var(--gold-light); z-index:400; transition:transform 0.4s cubic-bezier(0.32,0.72,0,1); white-space:nowrap; max-width:88vw; text-overflow:ellipsis; overflow:hidden; }
+    .toast.show { transform:translateX(-50%) translateY(0); }
+  </style>
+</head>
+<body>
+
+<div class="particles" id="particles"></div>
+
+<!-- ══════════ HOME ══════════ -->
+<div class="page active" id="page-home">
+  <div class="home-hero">
+    <div class="home-logo">uns<span class="heart">♥</span>zeit</div>
+    <div class="home-tagline">Zweisamkeit · trotz Alltag</div>
+  </div>
+  <div class="streak-card fade-section">
+    <div class="streak-flame">🕯️</div>
+    <div class="streak-info">
+      <h3 id="streak-count">3</h3>
+      <p>Tage Zweisamkeit am Stück</p>
+    </div>
+  </div>
+  <div class="daily-question fade-section" onclick="openModal('question')">
+    <div class="label">✦ Frage des Tages</div>
+    <div class="question" id="daily-q-text">"Was war der schönste Moment heute?"</div>
+    <div class="tap-hint">→ Tippe für ein Gespräch</div>
+  </div>
+  <div class="section-title">Schnelle Momente</div>
+  <div class="quick-actions fade-section">
+    <div class="quick-card" onclick="goTo('timer')"><div class="icon">⏱️</div><h4>Unser Moment</h4><p>5 Min nur für euch</p></div>
+    <div class="quick-card" onclick="goTo('ideas')"><div class="icon">✨</div><h4>Inspirationen</h4><p>Ideen für heute</p></div>
+    <div class="quick-card" onclick="goTo('connect')"><div class="icon">📡</div><h4>Verbunden</h4><p>Auch aus der Ferne</p></div>
+    <div class="quick-card" onclick="goTo('erotic')"><div class="icon">🔥</div><h4>Begehren</h4><p>Erotische Nähe</p></div>
+  </div>
+  <div class="section-title" style="margin-top:6px">Tägliche Rituale</div>
+  <div class="quick-actions fade-section" style="margin-bottom:20px">
+    <div class="quick-card" onclick="openModal('kiss')"><div class="icon">💋</div><h4>Kuss-Ritual</h4><p>6-Sekunden-Kuss?</p></div>
+    <div class="quick-card" onclick="goTo('challenges')"><div class="icon">🎯</div><h4>Challenge</h4><p>Diese Woche</p></div>
+  </div>
+</div>
+
+<!-- ══════════ IDEAS ══════════ -->
+<div class="page" id="page-ideas">
+  <div class="page-header"><h1>Ideen für <span>Euch</span></h1><p>Von romantisch bis abenteuerlich</p></div>
+  <div class="category-tabs">
+    <div class="tab active" onclick="filterIdeas('all',this)">Alle</div>
+    <div class="tab" onclick="filterIdeas('emotional',this)">💬 Emotional</div>
+    <div class="tab" onclick="filterIdeas('romantic',this)">🌹 Romantisch</div>
+    <div class="tab" onclick="filterIdeas('physical',this)">🤗 Körperlich</div>
+    <div class="tab" onclick="filterIdeas('adventure',this)">🌙 Abenteuer</div>
+    <div class="tab" onclick="filterIdeas('quick',this)">⚡ Schnell</div>
+  </div>
+  <div class="shuffle-btn" onclick="shuffleIdea()"><span>🎲</span> Überrasch mich!</div>
+  <div class="ideas-grid" id="ideas-container"></div>
+</div>
+
+<!-- ══════════ CHALLENGES ══════════ -->
+<div class="page" id="page-challenges">
+  <div class="page-header"><h1>Wochen<span>-Challenge</span></h1><p>Kleine Rituale, große Wirkung</p></div>
+  <div class="challenge-hero fade-section">
+    <div class="challenge-week">✦ Diese Woche</div>
+    <h2>Die Nähe-Woche</h2>
+    <p>7 Tage · 7 kleine Momente der echten Verbindung. Keine großen Gesten – nur echte Präsenz.</p>
+    <div class="challenge-btn" onclick="showToast('Woche gestartet! 🌹')">Challenge starten</div>
+  </div>
+  <div class="section-title">Aufgaben</div>
+  <div class="challenges-list" id="challenges-container"></div>
+</div>
+
+<!-- ══════════ TIMER ══════════ -->
+<div class="page" id="page-timer">
+  <div class="page-header"><h1>Unser <span>Moment</span></h1><p>Nur ihr zwei · ohne Ablenkung</p></div>
+  <div class="timer-container">
+    <div class="timer-presets">
+      <button class="timer-preset active" onclick="setTimer(5,this)">5 Min</button>
+      <button class="timer-preset" onclick="setTimer(10,this)">10 Min</button>
+      <button class="timer-preset" onclick="setTimer(20,this)">20 Min</button>
+    </div>
+    <div class="timer-ring">
+      <svg viewBox="0 0 220 220">
+        <defs><linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#c4637a"/><stop offset="100%" stop-color="#c9a96e"/></linearGradient></defs>
+        <circle class="ring-bg" cx="110" cy="110" r="100"/>
+        <circle class="ring-progress" id="ringProgress" cx="110" cy="110" r="100" stroke-dasharray="628.3" stroke-dashoffset="0"/>
+      </svg>
+      <div class="timer-display">
+        <div class="timer-time" id="timer-display">05:00</div>
+        <div class="timer-sub">gemeinsame Zeit</div>
+      </div>
+    </div>
+    <div class="timer-controls">
+      <button class="timer-btn" onclick="resetTimer()">↺</button>
+      <button class="timer-btn main" id="timerStartBtn" onclick="toggleTimer()">▶</button>
+      <button class="timer-btn" onclick="openModal('timerActivity')">✦</button>
+    </div>
+  </div>
+  <div class="section-title">Was möchtet ihr tun?</div>
+  <div class="moment-activities">
+    <div class="moment-card" onclick="selectActivity('Gespräch','💬')"><div class="icon">💬</div><h4>Gespräch</h4><p>Wirklich zuhören</p></div>
+    <div class="moment-card" onclick="selectActivity('Kuscheln','🤗')"><div class="icon">🤗</div><h4>Kuscheln</h4><p>Einfach nah sein</p></div>
+    <div class="moment-card" onclick="selectActivity('Massage','✋')"><div class="icon">✋</div><h4>Massage</h4><p>Entspannung schenken</p></div>
+    <div class="moment-card" onclick="selectActivity('Tanz','💃')"><div class="icon">💃</div><h4>Tanz</h4><p>In eurer Küche</p></div>
+  </div>
+</div>
+
+<!-- ══════════ EROTIC ══════════ -->
+<div class="page" id="page-erotic">
+  <div class="page-header"><h1><span>Begehren</span></h1><p>Erotische Zweisamkeit · nur für euch</p></div>
+  <div class="heat-meter fade-section">
+    <div class="heat-meter-label">✦ Stimmungs-Skala – wo seid ihr heute?</div>
+    <div class="heat-label-row"><span>Zärtlich</span><span>Leidenschaftlich</span></div>
+    <div class="heat-track" id="heatTrack" onclick="setHeat(event)">
+      <div class="heat-fill" id="heatFill" style="width:40%"></div>
+      <div class="heat-thumb" id="heatThumb" style="left:40%"></div>
+    </div>
+    <div class="heat-mood" id="heatMood">Sanft &amp; vertraut</div>
+  </div>
+  <div class="erotic-tabs">
+    <div class="tab active" onclick="filterErotic('all',this)">Alle</div>
+    <div class="tab" onclick="filterErotic('tender',this)">🌸 Zärtlich</div>
+    <div class="tab" onclick="filterErotic('playful',this)">🎭 Verspielt</div>
+    <div class="tab" onclick="filterErotic('sensual',this)">🌙 Sinnlich</div>
+    <div class="tab" onclick="filterErotic('bold',this)">🔥 Mutig</div>
+    <div class="tab" onclick="filterErotic('game',this)">🎲 Spiele</div>
+  </div>
+  <div class="dice-btn" onclick="spinErotic()"><span>🎲</span> Zufallsimpuls für heute Nacht</div>
+  <div class="erotic-grid" id="erotic-container"></div>
+</div>
+
+<!-- ══════════ CONNECT ══════════ -->
+<div class="page" id="page-connect">
+  <div class="page-header"><h1>Immer <span>Verbunden</span></h1><p>Nah sein · auch wenn ihr getrennt seid</p></div>
+  <div class="connect-status fade-section">
+    <div class="connect-avatars">
+      <div class="connect-avatar">🌸</div>
+      <div class="connect-line">
+        <div class="connect-dot"></div><div class="connect-dot"></div><div class="connect-dot"></div>
+      </div>
+      <div class="connect-avatar">🌿</div>
+    </div>
+    <h3>Ihr seid verbunden</h3>
+    <p>Letzte Aktivität: vor 23 Minuten</p>
+  </div>
+  <div class="connect-code-area fade-section">
+    <div class="connect-code-label">✦ Euer Paar-Code</div>
+    <div class="connect-code-display">RO·SE</div>
+    <div class="connect-code-actions">
+      <div class="connect-code-btn" onclick="sharePairCode()">📤 Teilen</div>
+      <div class="connect-code-btn" onclick="openModal('enterCode')">🔗 Code eingeben</div>
+    </div>
+  </div>
+  <div class="section-title">Einen Impuls senden</div>
+  <div class="pulse-grid fade-section">
+    <div class="pulse-card" onclick="sendPulse(this,'Herzschlag','💓','Ich denke an dich')"><div class="pulse-icon">💓</div><h4>Herzschlag</h4><p>Ich denke an dich</p></div>
+    <div class="pulse-card" onclick="sendPulse(this,'Kuss','💋','Ich schicke dir einen Kuss')"><div class="pulse-icon">💋</div><h4>Kuss</h4><p>Für unterwegs</p></div>
+    <div class="pulse-card" onclick="sendPulse(this,'Sehnsucht','🌙','Ich vermisse dich')"><div class="pulse-icon">🌙</div><h4>Sehnsucht</h4><p>Ich vermisse dich</p></div>
+    <div class="pulse-card" onclick="sendPulse(this,'Feuer','🔥','Ich will dich heute Abend')"><div class="pulse-icon">🔥</div><h4>Begehren</h4><p>Für heute Abend</p></div>
+    <div class="pulse-card" onclick="sendPulse(this,'Dankbarkeit','🌸','Ich bin froh, dass es dich gibt')"><div class="pulse-icon">🌸</div><h4>Dankbarkeit</h4><p>Ich bin froh um dich</p></div>
+    <div class="pulse-card" onclick="openModal('customPulse')"><div class="pulse-icon">✍️</div><h4>Eigene Botschaft</h4><p>Persönlich schreiben</p></div>
+  </div>
+  <div class="section-title" style="margin-top:14px">Nachrichten</div>
+  <div class="messages-area fade-section">
+    <div class="messages-header">✦ Nur zwischen euch</div>
+    <div class="messages-list" id="messagesList">
+      <div class="msg"><div class="msg-avatar">🌿</div><div><div class="msg-bubble">Ich denke gerade an unseren Urlaub letztes Jahr 🌊</div><div class="msg-time">vor 2 Std</div></div></div>
+      <div class="msg mine"><div class="msg-avatar">🌸</div><div><div class="msg-bubble">Das war so schön. Können wir bald wieder?</div><div class="msg-time">vor 1 Std</div></div></div>
+      <div class="msg"><div class="msg-avatar">🌿</div><div><div class="msg-bubble">💓 hat dir einen Herzschlag geschickt</div><div class="msg-time">vor 23 Min</div></div></div>
+    </div>
+    <div class="message-input-row">
+      <input class="message-input" id="msgInput" placeholder="Schreib etwas Schönes…" />
+      <button class="message-send" onclick="sendMessage()">↑</button>
+    </div>
+  </div>
+  <div class="section-title">Ferndate-Ideen</div>
+  <div class="ideas-grid" id="ferndateContainer" style="margin-bottom:22px"></div>
+</div>
+
+<!-- Navigation -->
+<nav>
+  <div class="nav-item active" onclick="goTo('home')"><span class="nav-icon">♥</span><span class="nav-label">Heute</span></div>
+  <div class="nav-item" onclick="goTo('ideas')"><span class="nav-icon">✨</span><span class="nav-label">Ideen</span></div>
+  <div class="nav-item" onclick="goTo('timer')"><span class="nav-icon">⏱</span><span class="nav-label">Moment</span></div>
+  <div class="nav-item" onclick="goTo('erotic')"><span class="nav-icon">🔥</span><span class="nav-label">Begehren</span></div>
+  <div class="nav-item" onclick="goTo('connect')"><span class="nav-icon">📡</span><span class="nav-label">Verbunden</span></div>
+</nav>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal"><div class="modal-handle"></div><div id="modalContent"></div><button class="modal-close" onclick="closeModal()">Schließen</button></div>
+</div>
+
+<!-- Spin Result -->
+<div class="spin-result" id="spinResult">
+  <div class="spin-result-emoji" id="spinEmoji"></div>
+  <div class="spin-result-title" id="spinTitle"></div>
+  <div class="spin-result-text" id="spinText"></div>
+  <button class="spin-close" onclick="document.getElementById('spinResult').classList.remove('show')">Verstanden 🌙</button>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ── DATA ──────────────────────────────────────
+const IDEAS = [
+  { emoji:'🌙', title:'Sternstunden', desc:'Legt euch draußen hin und schaut gemeinsam in den Himmel. Keine Handys. Nur ihr.', tags:['romantic','emotional'], labels:['Romantisch','30 Min'] },
+  { emoji:'💌', title:'Brief schreiben', desc:'Schreibt euch gegenseitig einen Brief auf Papier – was ihr aneinander liebt.', tags:['emotional'], labels:['Emotional','Jederzeit'] },
+  { emoji:'🕯️', title:'Kerzenbad', desc:'Badewanne, Kerzen, leise Musik. Wechselt euch beim Massieren der Schultern ab.', tags:['physical','romantic'], labels:['Körperlich','Romantisch'] },
+  { emoji:'🎵', title:'Euer Lied tanzen', desc:'Sucht euer gemeinsames Lied und tanzt in der Küche – so, wie ihr seid.', tags:['physical','romantic','quick'], labels:['Schnell','Romantisch'] },
+  { emoji:'🍳', title:'Gemeinsam kochen', desc:'Kocht zusammen etwas Neues. Kein Rezept kennen, gemeinsam ausprobieren.', tags:['emotional','adventure'], labels:['Emotional','Spaß'] },
+  { emoji:'📸', title:'Liebstes Foto', desc:'Sucht gemeinsam das schönste Foto von euch und erzählt die Geschichte dahinter.', tags:['emotional','quick'], labels:['Schnell','Emotional'] },
+  { emoji:'🌅', title:'Frühstück für zwei', desc:'30 Min früher aufwachen als die Kinder. Nur Kaffee, Stille, ihr zwei.', tags:['emotional','quick'], labels:['Emotional','Morgen'] },
+  { emoji:'🎲', title:'Wahrheit oder Pflicht', desc:'Die Erwachsenenversion – ehrliche Fragen, mutiger werden, gemeinsam lachen.', tags:['emotional','adventure'], labels:['Abenteuer','Spaß'] },
+  { emoji:'💆', title:'Kopfmassage', desc:'Kopf in den Schoß legen. Sanftes Massieren, kein Ziel, nur Nähe.', tags:['physical','quick'], labels:['Körperlich','Schnell'] },
+  { emoji:'🌹', title:'Überraschungs-Date', desc:'Einer plant alles geheim – der andere lässt sich überraschen. Auch zuhause möglich.', tags:['romantic','adventure'], labels:['Romantisch','Abenteuer'] },
+  { emoji:'📖', title:'Vorlesen', desc:'Lest euch abwechselnd aus einem Buch vor. Gemütlich und verbindend.', tags:['emotional','quick'], labels:['Emotional','Gemütlich'] },
+  { emoji:'🌃', title:'Nächtlicher Spaziergang', desc:'Wenn die Kinder schlafen: raus in die Nacht. Hand in Hand. Gespräche wie früher.', tags:['emotional','adventure','romantic'], labels:['Romantisch','Abenteuer'] },
+];
+
+const EROTIC_IDEAS = [
+  { emoji:'🌸', title:'Langsames Streicheln', desc:'Kein Ziel, keine Eile. Erkundet euch mit geschlossenen Augen und sagt dem anderen, was sich gut anfühlt. Volle Aufmerksamkeit auf den Moment.', tags:['tender','sensual'], intensity:1 },
+  { emoji:'💋', title:'Der 6-Sekunden-Kuss', desc:'Küsst euch mindestens 6 Sekunden lang – bewusst, langsam, ohne Eile. Göttman nennt das die wichtigste tägliche erotische Geste zwischen Paaren.', tags:['tender','playful'], intensity:1 },
+  { emoji:'🛁', title:'Ritualbad zu zweit', desc:'Badeschaum, gedimmtes Licht, ein Glas Wein. Wascht euch gegenseitig den Rücken. Keine Erwartungen – nur sinnliche Präsenz im warmen Wasser.', tags:['sensual','tender'], intensity:2 },
+  { emoji:'🎭', title:'Fantasie erzählen', desc:'Erzählt euch gegenseitig eine erotische Fantasie – ohne Druck, sie umzusetzen. Nur Worte, nur Nähe, nur das Vertrauen, ehrlich zu sein.', tags:['playful','bold','sensual'], intensity:2 },
+  { emoji:'🎲', title:'Körper-Würfelspiel', desc:'Würfelt abwechselnd. 1=Küssen, 2=Nacken, 3=Rücken, 4=Hände, 5=Wähle selbst, 6=Wildcard für heute Nacht. Macht eure eigenen Regeln.', tags:['game','playful'], intensity:2 },
+  { emoji:'🕯️', title:'Warmes Wachs-Öl', desc:'Massagekerzen schmelzen bei niedriger Temperatur zu Öl. Das Tropfen des warmen Öls und die folgende Massage ist sinnlich und verbindend zugleich.', tags:['sensual','bold'], intensity:2 },
+  { emoji:'👁️', title:'Schweigen & Berühren', desc:'5 Minuten kein Wort. Nur Berühren. Kein Kommentar, kein Lachen, kein Kommentieren – nur achtsame Aufmerksamkeit durch die Hände des anderen.', tags:['sensual','bold'], intensity:3 },
+  { emoji:'📝', title:'Wunschzettel tauschen', desc:'Jeder schreibt auf, was er sich vom anderen wünscht – auch erotisch. Dann tauschen. Keine Bewertung. Nur Offenheit und Neugier füreinander.', tags:['bold','game'], intensity:2 },
+  { emoji:'🎴', title:'Verführungs-Karten', desc:'Schreibt je 5 Wünsche auf Zettel. Faltet sie. Zieht abwechselnd. Was draufsteht, wird versucht – im Rahmen eures gemeinsamen Vertrauens.', tags:['game','bold'], intensity:3 },
+  { emoji:'🌙', title:'Im Dunkeln', desc:'Alle Lichter aus. Kein Bildschirm. Findet euch nur durch Berührung. Die Dunkelheit schärft alle anderen Sinne – und macht euch präsenter füreinander.', tags:['bold','sensual'], intensity:3 },
+  { emoji:'🎵', title:'Langsam tanzen, dann mehr', desc:'Fangt mit eurem Lied an. Tanzt nah. Lasst es von selbst weiterführen – ohne Plan, nur Instinkt und Vertrauen.', tags:['tender','sensual','playful'], intensity:2 },
+  { emoji:'💌', title:'Erotischer Brief', desc:'Schreibt euch einen Brief: Was zieht euch am anderen körperlich an? Was wünscht ihr euch? Tauscht aus und lest laut vor – langsam.', tags:['bold','sensual'], intensity:3 },
+  { emoji:'🎁', title:'Überraschungs-Nacht', desc:'Einer plant eine Nacht komplett geheim: Musik, Duft, Licht, Ablauf. Der andere kommt nach Hause und lässt sich vollständig überraschen.', tags:['bold','playful'], intensity:3 },
+];
+
+const FERNDATE_IDEAS = [
+  { emoji:'📺', title:'Film-Abend Fern', desc:'Gleichzeitig denselben Film starten. Voice-Notizen statt Texte schicken während ihr schaut.', labels:['Ferndate','Abend'] },
+  { emoji:'🍷', title:'Wein-Tasting', desc:'Bestellt denselben Wein. Öffnet ihn gleichzeitig per Video. Beschreibt euch, was ihr schmeckt.', labels:['Ferndate','Romantisch'] },
+  { emoji:'🎮', title:'Online-Spiel', desc:'Ein gemeinsames Spiel online – nicht wegen des Spiels, sondern wegen des Lachens dabei.', labels:['Ferndate','Spaß'] },
+  { emoji:'📖', title:'Gleichzeitig lesen', desc:'Beide lesen dasselbe Buch. Schickt euch täglich einen Lieblingsatz. Darüber reden am Wochenende.', labels:['Ferndate','Emotional'] },
+];
+
+const QUESTIONS = [
+  "Was war der schönste Moment heute, den du mit mir teilen möchtest?",
+  "Was liebst du an mir gerade am meisten?",
+  "Wofür bin ich dankbar, dass du in meinem Leben bist?",
+  "Was war dein liebster Moment aus unserem ersten Jahr?",
+  "Welcher Traum liegt dir gerade am Herzen?",
+  "Was wünschst du dir öfter von mir?",
+  "Wann hast du dich zuletzt wirklich von mir gesehen gefühlt?",
+  "Was ist eine Sache, die wir als Paar noch erleben wollen?",
+  "Wo siehst du uns in 10 Jahren?",
+  "Was bedeutet Zuhause für dich – in einem Satz?",
+];
+
+const CHALLENGES = [
+  { emoji:'💬', title:'10 Minuten ohne Handy', desc:'Abends, einfach miteinander reden', done:false },
+  { emoji:'💋', title:'Guten-Morgen-Kuss', desc:'Jeden Tag, bevor die Hektik beginnt', done:true },
+  { emoji:'🫶', title:'Rücken-Massage', desc:'5 Minuten für den anderen', done:false },
+  { emoji:'💌', title:'Eine Nachricht schicken', desc:'"Ich denke gerade an dich"', done:true },
+  { emoji:'🌙', title:'Gemeinsam einschlafen', desc:'Nicht beide am Handy – bewusst nah', done:false },
+  { emoji:'🎵', title:'Ein Lied teilen', desc:'Das euch gerade beschreibt', done:false },
+  { emoji:'✨', title:'Danke sagen', desc:'Für etwas ganz Kleines heute', done:false },
+];
+
+const HEAT_MOODS = ['Sanft & vertraut','Zärtlich nah','Sinnlich warm','Leidenschaftlich','Ungezähmt & feurig'];
+
+// ── INIT ──────────────────────────────────────
+function initParticles() {
+  const c = document.getElementById('particles');
+  for (let i = 0; i < 20; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.cssText = `left:${Math.random()*100}%;width:${1+Math.random()*2}px;height:${1+Math.random()*2}px;animation-delay:${Math.random()*10}s;animation-duration:${9+Math.random()*10}s;background:${Math.random()>.5?'#c4637a':'#c9a96e'}`;
+    c.appendChild(p);
+  }
+}
+
+// ── NAVIGATION ────────────────────────────────
+function goTo(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  const map={home:0,ideas:1,timer:2,erotic:3,connect:4};
+  if(map[page]!==undefined) document.querySelectorAll('.nav-item')[map[page]].classList.add('active');
+  window.scrollTo(0,0);
+  setTimeout(activateFades, 60);
+}
+function activateFades() {
+  document.querySelectorAll('.page.active .fade-section').forEach((el,i)=>{
+    setTimeout(()=>el.classList.add('visible'), i*80);
+  });
+}
+
+// ── IDEAS ─────────────────────────────────────
+let currentFilter='all';
+function renderIdeas(filter='all') {
+  currentFilter=filter;
+  const list=filter==='all'?IDEAS:IDEAS.filter(i=>i.tags.includes(filter));
+  document.getElementById('ideas-container').innerHTML=list.map((idea,idx)=>`
+    <div class="idea-card" onclick="openIdeaModal(${IDEAS.indexOf(idea)})" style="animation-delay:${idx*.05}s">
+      <div class="idea-emoji">${idea.emoji}</div>
+      <div class="idea-content"><h4>${idea.title}</h4><p>${idea.desc}</p>
+        <div class="idea-tags">${idea.labels.map((l,i)=>`<span class="idea-tag ${i===1?'gold':''}">${l}</span>`).join('')}</div>
+      </div></div>`).join('');
+}
+function filterIdeas(filter,tab) {
+  document.querySelectorAll('.category-tabs .tab').forEach(t=>t.classList.remove('active'));
+  tab.classList.add('active'); renderIdeas(filter);
+}
+function shuffleIdea() {
+  const list=currentFilter==='all'?IDEAS:IDEAS.filter(i=>i.tags.includes(currentFilter));
+  openIdeaModal(IDEAS.indexOf(list[Math.floor(Math.random()*list.length)]));
+}
+function openIdeaModal(idx) {
+  const idea=IDEAS[idx];
+  setModalContent(`<div style="text-align:center;margin-bottom:13px;font-size:46px">${idea.emoji}</div>
+    <div class="modal-title">${idea.title}</div>
+    <div class="modal-subtitle">${idea.labels.join(' · ')}</div>
+    <div class="modal-body">${idea.desc}</div>`);
+  openModal();
+}
+
+// ── EROTIC ────────────────────────────────────
+function renderErotic(filter='all') {
+  const list=filter==='all'?EROTIC_IDEAS:EROTIC_IDEAS.filter(i=>i.tags.includes(filter));
+  document.getElementById('erotic-container').innerHTML=list.map((idea,idx)=>`
+    <div class="erotic-card" onclick="openEroticModal(${EROTIC_IDEAS.indexOf(idea)})" style="animation-delay:${idx*.04}s">
+      <div class="erotic-card-header"><div class="erotic-card-icon">${idea.emoji}</div><h4>${idea.title}</h4></div>
+      <p>${idea.desc}</p>
+      <div class="erotic-intensity">
+        ${[1,2,3].map(n=>`<div class="intensity-dot ${n<=idea.intensity?'filled':''}"></div>`).join('')}
+        <span style="font-size:10px;color:var(--text-muted);margin-left:6px;font-weight:200">${['','Zärtlich','Sinnlich','Mutig'][idea.intensity]}</span>
+      </div></div>`).join('');
+}
+function filterErotic(filter,tab) {
+  document.querySelectorAll('.erotic-tabs .tab').forEach(t=>t.classList.remove('active'));
+  tab.classList.add('active'); renderErotic(filter);
+}
+function openEroticModal(idx) {
+  const idea=EROTIC_IDEAS[idx];
+  const dots=[1,2,3].map(n=>`<span style="display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px;background:${n<=idea.intensity?'var(--rose)':'rgba(255,255,255,0.1)'};box-shadow:${n<=idea.intensity?'0 0 6px rgba(196,99,122,0.5)':'none'}"></span>`).join('');
+  setModalContent(`<div style="text-align:center;margin-bottom:13px;font-size:46px">${idea.emoji}</div>
+    <div class="modal-title">${idea.title}</div>
+    <div class="modal-subtitle">${dots} ${'Zärtlich,Sinnlich,Mutig'.split(',')[idea.intensity-1]}</div>
+    <div class="modal-body">${idea.desc}</div>`);
+  openModal();
+}
+function spinErotic() {
+  const idea=EROTIC_IDEAS[Math.floor(Math.random()*EROTIC_IDEAS.length)];
+  document.getElementById('spinEmoji').textContent=idea.emoji;
+  document.getElementById('spinTitle').textContent=idea.title;
+  document.getElementById('spinText').textContent=idea.desc;
+  document.getElementById('spinResult').classList.add('show');
+}
+
+// Heat Meter
+function setHeat(e) {
+  const track=document.getElementById('heatTrack');
+  const rect=track.getBoundingClientRect();
+  const pct=Math.max(4,Math.min(96,((e.clientX-rect.left)/rect.width)*100));
+  document.getElementById('heatFill').style.width=pct+'%';
+  document.getElementById('heatThumb').style.left=pct+'%';
+  document.getElementById('heatMood').textContent=HEAT_MOODS[Math.min(4,Math.floor(pct/20))];
+}
+
+// ── CHALLENGES ────────────────────────────────
+function renderChallenges() {
+  document.getElementById('challenges-container').innerHTML=CHALLENGES.map((c,i)=>`
+    <div class="challenge-item ${c.done?'done':''}" onclick="toggleChallenge(${i})">
+      <div class="challenge-check">${c.done?'✓':''}</div>
+      <div class="challenge-text"><h4>${c.emoji} ${c.title}</h4><p>${c.desc}</p></div>
+    </div>`).join('');
+}
+function toggleChallenge(i) {
+  CHALLENGES[i].done=!CHALLENGES[i].done; renderChallenges();
+  if(CHALLENGES[i].done) showToast('✨ Gut gemacht!');
+}
+
+// ── TIMER ─────────────────────────────────────
+let timerDuration=300,timerRemaining=300,timerInterval=null,timerRunning=false;
+function setTimer(mins,btn){document.querySelectorAll('.timer-preset').forEach(b=>b.classList.remove('active'));btn.classList.add('active');timerDuration=mins*60;timerRemaining=timerDuration;updateTimerDisplay();if(timerInterval){clearInterval(timerInterval);timerInterval=null;timerRunning=false;}document.getElementById('timerStartBtn').textContent='▶';}
+function toggleTimer(){if(timerRunning){clearInterval(timerInterval);timerInterval=null;timerRunning=false;document.getElementById('timerStartBtn').textContent='▶';}else{timerRunning=true;document.getElementById('timerStartBtn').textContent='⏸';timerInterval=setInterval(()=>{timerRemaining--;updateTimerDisplay();if(timerRemaining<=0){clearInterval(timerInterval);timerRunning=false;document.getElementById('timerStartBtn').textContent='▶';showToast('⏱ Eure Zeit ist um – genießt noch einen Moment 💕');}},1000);}}
+function resetTimer(){clearInterval(timerInterval);timerInterval=null;timerRunning=false;timerRemaining=timerDuration;updateTimerDisplay();document.getElementById('timerStartBtn').textContent='▶';}
+function updateTimerDisplay(){const m=Math.floor(timerRemaining/60).toString().padStart(2,'0');const s=(timerRemaining%60).toString().padStart(2,'0');document.getElementById('timer-display').textContent=`${m}:${s}`;document.getElementById('ringProgress').style.strokeDashoffset=628.3*(1-timerRemaining/timerDuration);}
+function selectActivity(name,emoji){showToast(`${emoji} ${name} – viel Freude dabei!`);}
+
+// ── CONNECT ───────────────────────────────────
+function renderFerndates(){
+  document.getElementById('ferndateContainer').innerHTML=FERNDATE_IDEAS.map((idea,idx)=>`
+    <div class="idea-card" onclick="showToast('Schöne Idee! 🌙')" style="animation-delay:${idx*.05}s">
+      <div class="idea-emoji">${idea.emoji}</div>
+      <div class="idea-content"><h4>${idea.title}</h4><p>${idea.desc}</p>
+        <div class="idea-tags">${idea.labels.map((l,i)=>`<span class="idea-tag ${i===1?'gold':''}">${l}</span>`).join('')}</div>
+      </div></div>`).join('');
+}
+function sendPulse(el,name,emoji,text){
+  el.classList.add('sending');setTimeout(()=>el.classList.remove('sending'),700);
+  showToast(`${emoji} "${text}" gesendet`);
+  const list=document.getElementById('messagesList');
+  const div=document.createElement('div');div.className='msg mine';
+  div.innerHTML=`<div class="msg-avatar">🌸</div><div><div class="msg-bubble">${emoji} ${text}</div><div class="msg-time">gerade eben</div></div>`;
+  list.appendChild(div);list.scrollTop=list.scrollHeight;
+}
+function sendMessage(){
+  const input=document.getElementById('msgInput');const text=input.value.trim();if(!text)return;
+  const list=document.getElementById('messagesList');const div=document.createElement('div');div.className='msg mine';
+  div.innerHTML=`<div class="msg-avatar">🌸</div><div><div class="msg-bubble">${text}</div><div class="msg-time">gerade eben</div></div>`;
+  list.appendChild(div);list.scrollTop=list.scrollHeight;input.value='';showToast('💌 Gesendet');
+}
+function sharePairCode(){
+  if(navigator.share){navigator.share({title:'Uns-Zeit',text:'Verbinde dich mit mir! Code: RO·SE',url:window.location.href});}
+  else{navigator.clipboard?.writeText('RO·SE');showToast('📋 Code kopiert: RO·SE');}
+}
+
+// ── QUESTION ──────────────────────────────────
+function rotateDailyQuestion(){document.getElementById('daily-q-text').textContent=`"${QUESTIONS[new Date().getDay()%QUESTIONS.length]}"`;}
+
+// ── MODAL ─────────────────────────────────────
+const MODAL_T = {
+  question:()=>{const q=QUESTIONS[Math.floor(Math.random()*QUESTIONS.length)];return`<div style="text-align:center;font-size:38px;margin-bottom:13px">💬</div><div class="modal-title">Frage für euch</div><div class="modal-subtitle">Nehmt euch Zeit. Wirklich zuhören.</div><div class="modal-body" style="font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-style:italic;color:var(--cream)">"${q}"</div>`;},
+  kiss:()=>`<div style="text-align:center;font-size:38px;margin-bottom:13px">💋</div><div class="modal-title">Der 6-Sekunden-Kuss</div><div class="modal-subtitle">Nicht der schnelle Abschiedskuss – ein echter</div><div class="modal-body">Der Paartherapeut John Gottman hat herausgefunden: Paare, die sich täglich 6 Sekunden lang bewusst küssen, bleiben langfristig glücklicher und verbundener.<br><br>Küsst euch jetzt. Sechs Sekunden. Augen zu.</div>`,
+  timerActivity:()=>`<div style="text-align:center;font-size:38px;margin-bottom:13px">✨</div><div class="modal-title">Ideen für eure Zeit</div><div class="modal-subtitle">Was passt heute?</div><div class="modal-body"><p>• Zusammen sitzen bei Kerzenlicht</p><br><p>• Einen Wein teilen und reden</p><br><p>• Die Füße des anderen massieren</p><br><p>• Eine Playlist erstellen: "Unsere Lieder"</p><br><p>• Alte Fotos gemeinsam anschauen</p></div>`,
+  enterCode:()=>`<div style="text-align:center;font-size:38px;margin-bottom:13px">🔗</div><div class="modal-title">Code eingeben</div><div class="modal-subtitle">Gebt den Code eures Partners ein</div><input style="width:100%;margin-top:14px;background:rgba(255,255,255,0.04);border:1px solid rgba(196,99,122,0.22);border-radius:11px;padding:13px 15px;color:var(--cream);font-family:'Cormorant Garamond',serif;font-size:1.5rem;letter-spacing:0.3em;text-align:center;outline:none" placeholder="XX·XX" maxlength="5"/>`,
+  customPulse:()=>`<div style="text-align:center;font-size:38px;margin-bottom:13px">✍️</div><div class="modal-title">Persönliche Botschaft</div><div class="modal-subtitle">Was möchtest du deinem Schatz sagen?</div><textarea id="customMsg" style="width:100%;height:95px;background:rgba(255,255,255,0.04);border:1px solid rgba(196,99,122,0.19);border-radius:11px;padding:11px;color:var(--cream);font-family:'Jost',sans-serif;font-size:13px;font-weight:300;outline:none;resize:none;line-height:1.6;margin-top:14px" placeholder="Ich denke an dich…"></textarea><div onclick="sendCustomMsg()" style="margin-top:13px;padding:12px;background:rgba(196,99,122,0.14);border:1px solid rgba(196,99,122,0.28);border-radius:11px;color:var(--rose-light);font-family:'Jost',sans-serif;font-size:13px;font-weight:300;text-align:center;cursor:pointer">💌 Senden</div>`,
+};
+function sendCustomMsg(){const text=document.getElementById('customMsg')?.value.trim();if(!text)return;closeModal();sendPulse(document.createElement('div'),'','\💌',text);}
+function setModalContent(html){document.getElementById('modalContent').innerHTML=html;}
+function openModal(key){if(key&&MODAL_T[key])document.getElementById('modalContent').innerHTML=MODAL_T[key]();document.getElementById('modalOverlay').classList.add('open');}
+function closeModal(e){if(!e||e.target===document.getElementById('modalOverlay'))document.getElementById('modalOverlay').classList.remove('open');}
+
+// ── TOAST ─────────────────────────────────────
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2600);}
+
+// ── BOOT ──────────────────────────────────────
+initParticles();
+renderIdeas();
+renderErotic();
+renderChallenges();
+renderFerndates();
+rotateDailyQuestion();
+updateTimerDisplay();
+setTimeout(activateFades, 100);
+document.getElementById('msgInput').addEventListener('keypress',e=>{if(e.key==='Enter')sendMessage();});
+if('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+</script>
+</body>
+</html>
