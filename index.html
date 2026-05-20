@@ -336,6 +336,50 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:100;display:flex;justify-cont
 
 /* ── NOTIFICATION BADGE ── */
 .badge{position:absolute;top:0;right:4px;width:8px;height:8px;border-radius:50%;background:var(--rose);box-shadow:0 0 6px rgba(196,99,122,.6);}
+
+/* ── SETTINGS ── */
+#page-settings{padding-bottom:40px;}
+.settings-header{display:flex;align-items:center;gap:14px;padding:52px 24px 24px;}
+.back-btn{width:38px;height:38px;border-radius:50%;border:1px solid rgba(196,99,122,.22);background:rgba(196,99,122,.08);color:var(--rose-l);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .3s;}
+.back-btn:active{transform:scale(.9);background:rgba(196,99,122,.2);}
+.settings-header h1{font-family:'Cormorant Garamond',serif;font-size:1.9rem;font-weight:300;color:var(--cream);}
+.settings-section{margin:0 24px 20px;}
+.settings-section-title{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
+.settings-card{background:var(--card);border:1px solid var(--cb);border-radius:16px;overflow:hidden;}
+.settings-row{padding:16px 18px;display:flex;align-items:center;gap:14px;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer;transition:background .2s;}
+.settings-row:last-child{border-bottom:none;}
+.settings-row:active{background:rgba(255,255,255,.04);}
+.settings-row-icon{font-size:20px;width:34px;text-align:center;flex-shrink:0;}
+.settings-row-content{flex:1;}
+.settings-row-label{font-size:13px;font-weight:300;color:var(--cream);}
+.settings-row-sub{font-size:11px;font-weight:200;color:var(--muted);margin-top:2px;}
+.settings-row-arrow{font-size:12px;color:var(--muted);}
+.settings-row-badge{padding:3px 9px;border-radius:20px;font-size:10px;font-weight:300;}
+.settings-row-badge.ok{background:rgba(111,207,151,.12);border:1px solid rgba(111,207,151,.25);color:var(--green);}
+.settings-row-badge.missing{background:rgba(196,99,122,.1);border:1px solid rgba(196,99,122,.2);color:var(--rose-l);}
+
+.api-key-wrap{padding:0 24px;margin-bottom:20px;}
+.api-key-label{font-size:11px;font-weight:200;color:var(--muted);margin-bottom:8px;line-height:1.7;}
+.api-key-input-row{display:flex;gap:8px;}
+.api-key-input{flex:1;padding:12px 16px;background:var(--card);border:1px solid var(--cb);border-radius:13px;color:var(--text);font-family:'Jost',sans-serif;font-size:12px;font-weight:300;outline:none;transition:border-color .3s;letter-spacing:.05em;}
+.api-key-input::placeholder{color:var(--muted);}
+.api-key-input:focus{border-color:rgba(196,99,122,.45);}
+.api-key-btn{padding:12px 16px;border-radius:13px;border:1px solid var(--rose);background:rgba(196,99,122,.14);color:var(--rose-l);font-family:'Jost',sans-serif;font-size:12px;font-weight:300;cursor:pointer;transition:all .3s;white-space:nowrap;}
+.api-key-btn:active{background:rgba(196,99,122,.26);transform:scale(.97);}
+.api-key-hint{font-size:10px;font-weight:200;color:var(--muted);margin-top:8px;line-height:1.6;}
+.api-key-hint a{color:var(--rose-l);text-decoration:none;}
+
+.about-box{margin:0 24px;padding:20px;background:linear-gradient(135deg,rgba(196,99,122,.07),rgba(201,169,110,.04));border:1px solid rgba(196,99,122,.14);border-radius:16px;text-align:center;}
+.about-logo{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:300;color:var(--cream);margin-bottom:4px;}
+.about-version{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;}
+.about-divider{height:1px;background:rgba(255,255,255,.06);margin:14px 0;}
+.about-dev{font-size:11px;font-weight:200;color:var(--muted);line-height:1.9;}
+.about-dev strong{color:var(--cream);font-weight:300;}
+
+/* ── SETTINGS FAB (gear icon on home) ── */
+.settings-fab{position:fixed;top:max(14px,env(safe-area-inset-top));right:16px;z-index:50;width:36px;height:36px;border-radius:50%;border:1px solid rgba(196,99,122,.2);background:rgba(15,6,9,.7);backdrop-filter:blur(10px);color:var(--muted);font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .3s;}
+.settings-fab:active{transform:scale(.9);color:var(--rose-l);}
+.api-status-dot{position:absolute;bottom:1px;right:1px;width:7px;height:7px;border-radius:50%;border:1px solid var(--bg);}
 </style>
 </head>
 <body>
@@ -735,6 +779,113 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:100;display:flex;justify-cont
   </div>
 </div>
 
+<!-- SETTINGS FAB -->
+<button class="settings-fab" onclick="goTo('settings')" title="Einstellungen">
+  ⚙️
+  <div class="api-status-dot" id="apiStatusDot" style="background:#3d3d3d"></div>
+</button>
+
+<!-- SETTINGS PAGE -->
+<div class="page" id="page-settings">
+  <div class="settings-header">
+    <button class="back-btn" onclick="goBack()" title="Zurück">←</button>
+    <h1>Einstellungen</h1>
+  </div>
+
+  <!-- API Key -->
+  <div class="settings-section">
+    <div class="settings-section-title">🤖 KI-Assistent</div>
+    <div class="settings-card">
+      <div class="settings-row" onclick="focusApiKey()">
+        <div class="settings-row-icon">🔑</div>
+        <div class="settings-row-content">
+          <div class="settings-row-label">Anthropic API-Key</div>
+          <div class="settings-row-sub" id="apiKeyStatus">Nicht hinterlegt</div>
+        </div>
+        <div class="settings-row-badge missing" id="apiKeyBadge">Fehlt</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="api-key-wrap">
+    <div class="api-key-label">
+      Der KI-Assistent benötigt einen Anthropic API-Key. Dieser wird ausschließlich lokal in deinem Browser gespeichert und nie an Dritte weitergegeben.
+    </div>
+    <div class="api-key-input-row">
+      <input class="api-key-input" id="apiKeyInput" type="password" placeholder="sk-ant-api03-…" autocomplete="off" spellcheck="false"/>
+      <button class="api-key-btn" onclick="saveApiKey()">Speichern</button>
+    </div>
+    <div class="api-key-hint">
+      API-Key erstellen: <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a>
+      → API Keys → Create Key. Der Key beginnt mit <strong style="color:var(--cream)">sk-ant-</strong>
+    </div>
+  </div>
+
+  <!-- Profile -->
+  <div class="settings-section">
+    <div class="settings-section-title">👤 Profil</div>
+    <div class="settings-card">
+      <div class="settings-row" onclick="resetProfile()">
+        <div class="settings-row-icon">🔄</div>
+        <div class="settings-row-content">
+          <div class="settings-row-label">Profil neu erstellen</div>
+          <div class="settings-row-sub">Fragebogen erneut durchlaufen</div>
+        </div>
+        <div class="settings-row-arrow">›</div>
+      </div>
+      <div class="settings-row" onclick="clearAllData()">
+        <div class="settings-row-icon">🗑️</div>
+        <div class="settings-row-content">
+          <div class="settings-row-label" style="color:#e88">Alle Daten löschen</div>
+          <div class="settings-row-sub">Setzt die App vollständig zurück</div>
+        </div>
+        <div class="settings-row-arrow">›</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notifications placeholder -->
+  <div class="settings-section">
+    <div class="settings-section-title">🔔 Erinnerungen</div>
+    <div class="settings-card">
+      <div class="settings-row" onclick="toast('Kommt in Version 1.2 🌹')">
+        <div class="settings-row-icon">🌅</div>
+        <div class="settings-row-content">
+          <div class="settings-row-label">Morgen-Erinnerung</div>
+          <div class="settings-row-sub">Tägliche Frage um 8:00 Uhr</div>
+        </div>
+        <div class="settings-row-badge missing">Bald</div>
+      </div>
+      <div class="settings-row" onclick="toast('Kommt in Version 1.2 🌹')">
+        <div class="settings-row-icon">🌙</div>
+        <div class="settings-row-content">
+          <div class="settings-row-label">Abend-Erinnerung</div>
+          <div class="settings-row-sub">Kuss-Erinnerung um 20:00 Uhr</div>
+        </div>
+        <div class="settings-row-badge missing">Bald</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- About -->
+  <div class="about-box">
+    <div class="about-logo">uns♥zeit</div>
+    <div class="about-version">Version 1.1 · Mai 2026</div>
+    <div class="about-divider"></div>
+    <div class="about-dev">
+      Entwickelt mit ♥ von<br>
+      <strong>René Prause</strong><br>
+      <span style="font-size:10px;color:var(--muted)">Mai 2026 · Alle Daten bleiben lokal auf deinem Gerät</span>
+    </div>
+    <div class="about-divider"></div>
+    <div style="font-size:10px;color:var(--muted);line-height:1.7">
+      Diese App wurde mit Claude (Anthropic) entwickelt.<br>
+      KI-Funktionen erfordern einen eigenen API-Key.
+    </div>
+  </div>
+  <div style="height:40px"></div>
+</div>
+
 <!-- NAV -->
 <nav>
   <div class="ni active" id="nav-home" onclick="goTo('home')"><span class="ni-icon">♥</span><span class="ni-label">Heute</span></div>
@@ -928,17 +1079,23 @@ function updateProfileUI(){
   document.getElementById('myBarName').textContent=profile.name||'Du';
 }
 function getWelcomeMsg(){
+  const hasKey=!!getApiKey();
+  if(!hasKey) return '🔑 Hallo! Damit ich euch wirklich helfen kann, brauche ich einen **Anthropic API-Key**. Bitte in den ⚙️ **Einstellungen** hinterlegen – dann bin ich voll einsatzbereit! ♥';
   if(!profile.name||profile.name==='Du') return '♥ Hallo! Ich bin euer persönlicher Beziehungsassistent. Erstellt zuerst eure Profile, damit ich euch wirklich kennenlernen kann. Was kann ich für euch tun?';
   const love=profile.love?`Ich weiß, dass deine Liebessprache **${LOVE_LABELS[profile.love]}** ist`:'';
-  const stress=profile.stress?` und bei Stress brauchst du **${STRESS_LABELS[profile.stress]}`:'';
-  return `♥ Hallo ${profile.name}! ${love}${stress}**. Basierend auf deinem Profil kann ich euch personalisierte Ideen und Ratschläge geben. Was möchtest du wissen?`;
+  const stress=profile.stress?` und bei Stress brauchst du **${STRESS_LABELS[profile.stress]}**`:'';
+  return `♥ Hallo ${profile.name}! ${love}${stress}. Basierend auf deinem Profil kann ich euch personalisierte Ideen geben. Was möchtest du wissen?`;
 }
 
 // ════════════════════════════════════════════════
 // NAVIGATION
 // ════════════════════════════════════════════════
-const PAGES=['home','ai','connect','ideas','history','challenges','timer','checkin'];
+const PAGES=['home','ai','connect','ideas','history','challenges','timer','checkin','settings'];
 function goTo(name){
+  const currentActive=document.querySelector('.page.active');
+  if(currentActive&&currentActive.id!=='page-'+name){
+    prevPage=currentActive.id.replace('page-','');
+  }
   PAGES.forEach(p=>{
     const el=document.getElementById('page-'+p);
     const ni=document.getElementById('nav-'+p);
@@ -949,6 +1106,11 @@ function goTo(name){
   const nav=document.getElementById('nav-'+name);
   if(page)page.classList.add('active');
   if(nav)nav.classList.add('active');
+  // hide FAB on settings page, show elsewhere
+  const fab=document.querySelector('.settings-fab');
+  if(fab)fab.style.display=name==='settings'?'none':'flex';
+  // refresh API key UI when opening settings
+  if(name==='settings')updateApiKeyUI();
   window.scrollTo(0,0);
   setTimeout(activateFades,60);
 }
@@ -1005,10 +1167,16 @@ async function sendToAI(){
   const msg=inp.value.trim();
   if(!msg)return;
   inp.value='';
-  askAI(msg);
+  await askAI(msg);
 }
 
 async function askAI(msg){
+  const apiKey=getApiKey();
+  if(!apiKey){
+    addAIBubble('🔑 Kein API-Key hinterlegt. Bitte in den **Einstellungen** einen Anthropic API-Key eingeben, damit der Assistent funktioniert.');
+    setTimeout(()=>goTo('settings'),1800);
+    return;
+  }
   addUserBubble(msg);
   const typingEl=addTypingBubble();
   chatHistory.push({role:'user',content:msg});
@@ -1016,7 +1184,7 @@ async function askAI(msg){
   try{
     const res=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
-      headers:{'Content-Type':'application/json'},
+      headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
       body:JSON.stringify({
         model:'claude-sonnet-4-20250514',
         max_tokens:1000,
@@ -1024,14 +1192,27 @@ async function askAI(msg){
         messages:chatHistory
       })
     });
+    if(!res.ok){
+      const err=await res.json().catch(()=>({}));
+      typingEl.remove();
+      if(res.status===401){
+        addAIBubble('🔑 Der API-Key ist ungültig. Bitte in den **Einstellungen** einen gültigen Key eingeben.');
+        setTimeout(()=>goTo('settings'),1800);
+      } else {
+        addAIBubble(`⚠️ Fehler ${res.status}: ${err.error?.message||'Unbekannter Fehler'}`);
+      }
+      chatHistory.pop();
+      return;
+    }
     const data=await res.json();
-    const text=data.content&&data.content[0]&&data.content[0].text||'Ich konnte leider keine Antwort generieren.';
+    const text=data.content&&data.content[0]&&data.content[0].text||'Keine Antwort erhalten.';
     typingEl.remove();
     addAIBubble(text);
     chatHistory.push({role:'assistant',content:text});
   }catch(e){
     typingEl.remove();
-    addAIBubble('Verbindungsfehler. Bitte prüft eure Internetverbindung.');
+    addAIBubble('Verbindungsfehler. Bitte Internetverbindung prüfen.');
+    chatHistory.pop();
   }
 }
 
@@ -1331,6 +1512,61 @@ function closeModal(e){
 }
 
 // ════════════════════════════════════════════════
+// API KEY MANAGEMENT
+// ════════════════════════════════════════════════
+const APP_VERSION = '1.1';
+const APP_MONTH   = 'Mai';
+const APP_YEAR    = '2026';
+const APP_DEV     = 'René Prause';
+
+function getApiKey(){return localStorage.getItem('unszeit_apikey')||'';}
+
+function saveApiKey(){
+  const val=document.getElementById('apiKeyInput').value.trim();
+  if(!val){toast('Bitte einen API-Key eingeben');return;}
+  if(!val.startsWith('sk-ant-')){toast('⚠️ Der Key sollte mit sk-ant- beginnen');return;}
+  localStorage.setItem('unszeit_apikey',val);
+  updateApiKeyUI();
+  toast('✅ API-Key gespeichert – KI-Assistent bereit!');
+}
+
+function updateApiKeyUI(){
+  const key=getApiKey();
+  const hasKey=!!key;
+  const statusEl=document.getElementById('apiKeyStatus');
+  const badgeEl=document.getElementById('apiKeyBadge');
+  const dotEl=document.getElementById('apiStatusDot');
+  if(statusEl){
+    statusEl.textContent=hasKey?'Key hinterlegt: sk-ant-…'+key.slice(-4):'Nicht hinterlegt – KI nicht aktiv';
+  }
+  if(badgeEl){
+    badgeEl.textContent=hasKey?'Aktiv':'Fehlt';
+    badgeEl.className='settings-row-badge '+(hasKey?'ok':'missing');
+  }
+  if(dotEl){dotEl.style.background=hasKey?'var(--green)':'#c4637a';}
+  // pre-fill input with masked version if exists
+  const inp=document.getElementById('apiKeyInput');
+  if(inp&&hasKey) inp.placeholder='sk-ant-…'+key.slice(-4)+' (gespeichert)';
+}
+
+function focusApiKey(){
+  const inp=document.getElementById('apiKeyInput');
+  if(inp){inp.focus();inp.scrollIntoView({behavior:'smooth',block:'center'});}
+}
+
+function resetProfile(){
+  if(!confirm('Profil wirklich zurücksetzen?'))return;
+  localStorage.removeItem('unszeit_profile');
+  location.reload();
+}
+
+function clearAllData(){
+  if(!confirm('Alle Daten wirklich löschen? Das kann nicht rückgängig gemacht werden.'))return;
+  localStorage.clear();
+  location.reload();
+}
+
+// ════════════════════════════════════════════════
 // TOAST
 // ════════════════════════════════════════════════
 function toast(msg){
@@ -1338,6 +1574,12 @@ function toast(msg){
   t.textContent=msg;t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),2800);
 }
+
+// ════════════════════════════════════════════════
+// BACK NAVIGATION
+// ════════════════════════════════════════════════
+let prevPage='home';
+function goBack(){goTo(prevPage);}
 
 // ════════════════════════════════════════════════
 // BOOT
@@ -1348,6 +1590,7 @@ function toast(msg){
     try{profile=JSON.parse(saved);document.getElementById('onboarding').classList.add('hidden');initApp();}
     catch(e){/* fresh start */}
   }
+  updateApiKeyUI();
   if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
 })();
 </script>
