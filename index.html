@@ -1,661 +1,1355 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#0f0609" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="description" content="Uns-Zeit – Zweisamkeit für Paare" />
-  <title>Uns-Zeit 💫</title>
-  <link rel="manifest" href="manifest.json" />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet" />
-  <style>
-    :root{--bg:#0f0609;--bg2:#1a0c10;--bg3:#201018;--rose:#c4637a;--rose-light:#e8899e;--gold:#c9a96e;--gold-light:#e8c98a;--plum:#7a3a5c;--plum-light:#b06090;--cream:#f5ede6;--text:#f0e6ea;--muted:#9a7d85;--card:rgba(255,255,255,.04);--cb:rgba(196,99,122,.18);}
-    *{box-sizing:border-box;margin:0;padding:0;}
-    body{font-family:'Jost',sans-serif;background:var(--bg);color:var(--text);min-height:100dvh;overflow-x:hidden;}
-    body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 70% 50% at 15% 10%,rgba(196,99,122,.09) 0%,transparent 60%),radial-gradient(ellipse 50% 40% at 85% 85%,rgba(201,169,110,.07) 0%,transparent 60%),radial-gradient(ellipse 60% 60% at 50% 50%,rgba(122,58,92,.05) 0%,transparent 70%);}
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="theme-color" content="#0f0609"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<title>Uns-Zeit 💫</title>
+<link rel="manifest" href="manifest.json"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#0f0609;--bg2:#1a0c10;--bg3:#251018;
+  --rose:#c4637a;--rose-l:#e8899e;--rose-p:rgba(196,99,122,0.15);
+  --gold:#c9a96e;--gold-l:#e8c98a;--gold-d:rgba(201,169,110,0.12);
+  --plum:#7a3d5c;--plum-l:#a85c80;
+  --green:#6fcf97;
+  --cream:#f5ede6;--text:#f0e6ea;--muted:#9a7d85;
+  --card:rgba(255,255,255,0.035);--cb:rgba(196,99,122,0.16);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Jost',sans-serif;background:var(--bg);color:var(--text);min-height:100dvh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(ellipse 70% 50% at 15% 15%,rgba(196,99,122,0.07) 0%,transparent 60%),
+    radial-gradient(ellipse 50% 40% at 85% 80%,rgba(201,169,110,0.05) 0%,transparent 60%),
+    radial-gradient(ellipse 60% 60% at 50% 50%,rgba(122,61,92,0.05) 0%,transparent 80%);}
 
-    /* particles */
-    .particles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
-    .particle{position:absolute;border-radius:50%;opacity:0;animation:floatUp linear infinite;}
-    @keyframes floatUp{0%{opacity:0;transform:translateY(0) scale(0);}10%{opacity:.5;transform:translateY(-10px) scale(1);}90%{opacity:.15;}100%{opacity:0;transform:translateY(-120vh) scale(.4);}}
+/* Particles */
+.particles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.particle{position:absolute;border-radius:50%;opacity:0;animation:floatUp linear infinite;}
+@keyframes floatUp{0%{opacity:0;transform:translateY(0) scale(0);}10%{opacity:.5;transform:translateY(-10px) scale(1);}90%{opacity:.1;}100%{opacity:0;transform:translateY(-110vh) scale(.3);}}
 
-    /* layout */
-    nav{position:fixed;bottom:0;left:0;right:0;z-index:100;display:flex;justify-content:space-around;align-items:center;padding:10px 0 max(10px,env(safe-area-inset-bottom));background:rgba(10,4,7,.9);backdrop-filter:blur(24px);border-top:1px solid rgba(196,99,122,.12);}
-    .ni{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:6px 12px;border-radius:12px;transition:all .3s;opacity:.42;}
-    .ni.active{opacity:1;}
-    .ni:active{transform:scale(.92);}
-    .ni-icon{font-size:20px;line-height:1;}
-    .ni-label{font-size:9px;font-weight:300;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
-    .ni.active .ni-label{color:var(--rose-light);}
-    .ni.active .ni-icon{filter:drop-shadow(0 0 8px rgba(196,99,122,.6));}
+/* ── ONBOARDING ── */
+#onboarding{position:fixed;inset:0;z-index:1000;background:var(--bg);display:flex;flex-direction:column;overflow-y:auto;}
+#onboarding.hidden{display:none;}
+.ob-wrap{flex:1;display:flex;flex-direction:column;padding:0 0 40px;}
+.ob-hero{padding:60px 28px 32px;text-align:center;}
+.ob-logo{font-family:'Cormorant Garamond',serif;font-size:clamp(2.8rem,11vw,4.5rem);font-weight:300;color:var(--cream);letter-spacing:-.02em;}
+.ob-logo .heart{color:var(--rose);animation:hb 2.8s ease-in-out infinite;display:inline-block;filter:drop-shadow(0 0 14px rgba(196,99,122,.55));}
+@keyframes hb{0%,100%{transform:scale(1);}15%{transform:scale(1.18);}30%{transform:scale(1);}45%{transform:scale(1.09);}60%{transform:scale(1);}}
+.ob-tagline{font-size:11px;font-weight:200;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-top:10px;}
+.ob-desc{font-size:13px;font-weight:200;color:var(--muted);line-height:1.8;margin-top:16px;max-width:340px;margin-left:auto;margin-right:auto;}
 
-    .page{display:none;min-height:100dvh;padding-bottom:88px;position:relative;z-index:1;animation:fadeIn .35s ease;}
-    .page.active{display:block;}
-    @keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+/* Profile questions */
+.ob-step{display:none;flex:1;flex-direction:column;padding:28px 24px;}
+.ob-step.active{display:flex;}
+.ob-prog{display:flex;gap:5px;margin-bottom:28px;}
+.ob-prog-dot{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.08);transition:background .4s;}
+.ob-prog-dot.done{background:var(--rose);}
+.ob-prog-dot.active{background:rgba(196,99,122,.5);}
+.ob-q-num{font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--rose);margin-bottom:10px;}
+.ob-q-text{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:300;color:var(--cream);line-height:1.45;margin-bottom:6px;}
+.ob-q-hint{font-size:11px;font-weight:200;color:var(--muted);margin-bottom:24px;line-height:1.6;}
+.ob-options{display:flex;flex-direction:column;gap:9px;margin-bottom:20px;}
+.ob-opt{padding:14px 18px;background:var(--card);border:1px solid var(--cb);border-radius:14px;cursor:pointer;transition:all .3s;font-size:13px;font-weight:300;color:var(--text);line-height:1.4;}
+.ob-opt:active,.ob-opt.sel{background:rgba(196,99,122,.14);border-color:var(--rose);color:var(--rose-l);}
+.ob-opt.multi.sel{background:rgba(196,99,122,.12);border-color:var(--rose);}
+.ob-tag{font-size:9px;display:block;color:var(--muted);margin-top:2px;letter-spacing:.05em;}
+.ob-next{width:100%;padding:14px;border-radius:14px;border:1px solid var(--rose);background:rgba(196,99,122,.15);color:var(--rose-l);font-family:'Jost',sans-serif;font-size:13px;font-weight:300;letter-spacing:.08em;cursor:pointer;transition:all .3s;margin-top:auto;}
+.ob-next:active{background:rgba(196,99,122,.28);transform:scale(.98);}
+.ob-name-input{width:100%;padding:14px 18px;background:var(--card);border:1px solid var(--cb);border-radius:14px;color:var(--text);font-family:'Jost',sans-serif;font-size:15px;font-weight:300;outline:none;margin-bottom:16px;transition:border-color .3s;}
+.ob-name-input::placeholder{color:var(--muted);}
+.ob-name-input:focus{border-color:rgba(196,99,122,.5);}
+.ob-finish{background:linear-gradient(135deg,rgba(196,99,122,.2),rgba(201,169,110,.12));border-color:var(--gold)!important;color:var(--gold-l)!important;}
 
-    .ph{padding:54px 24px 18px;text-align:center;}
-    .ph h1{font-family:'Cormorant Garamond',serif;font-size:clamp(1.85rem,7vw,2.5rem);font-weight:300;color:var(--cream);line-height:1.2;}
-    .ph h1 span{color:var(--rose-light);font-style:italic;}
-    .ph p{margin-top:6px;font-size:12px;font-weight:200;color:var(--muted);letter-spacing:.06em;}
+/* ── NAV ── */
+nav{position:fixed;bottom:0;left:0;right:0;z-index:100;display:flex;justify-content:space-around;align-items:center;padding:10px 0 max(10px,env(safe-area-inset-bottom));background:rgba(10,4,7,.92);backdrop-filter:blur(24px);border-top:1px solid rgba(196,99,122,.1);}
+.ni{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:5px 10px;border-radius:12px;transition:all .3s;opacity:.4;}
+.ni.active{opacity:1;}
+.ni:active{transform:scale(.9);}
+.ni-icon{font-size:19px;line-height:1;}
+.ni-label{font-size:8px;font-weight:300;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
+.ni.active .ni-label{color:var(--rose-l);}
+.ni.active .ni-icon{filter:drop-shadow(0 0 8px rgba(196,99,122,.7));}
 
-    .sl{padding:16px 24px 9px;font-size:9px;font-weight:300;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);}
+/* ── PAGES ── */
+.page{display:none;min-height:100dvh;padding-bottom:95px;position:relative;z-index:1;}
+.page.active{display:block;animation:fadeIn .35s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.fs{opacity:0;transform:translateY(14px);transition:opacity .5s ease,transform .5s ease;}
+.fs.visible{opacity:1;transform:translateY(0);}
 
-    .fs{opacity:0;transform:translateY(14px);transition:opacity .5s ease,transform .5s ease;}
-    .fs.v{opacity:1;transform:translateY(0);}
+/* ── SHARED COMPONENTS ── */
+.ph{padding:52px 24px 18px;text-align:center;}
+.ph h1{font-family:'Cormorant Garamond',serif;font-size:clamp(1.9rem,7vw,2.7rem);font-weight:300;color:var(--cream);line-height:1.2;}
+.ph h1 span{color:var(--rose-l);font-style:italic;}
+.ph p{margin-top:7px;font-size:12px;font-weight:200;color:var(--muted);letter-spacing:.05em;}
+.slabel{padding:16px 24px 9px;font-size:9px;font-weight:300;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);}
+.card{background:var(--card);border:1px solid var(--cb);border-radius:16px;}
+.btn-rose{display:block;padding:13px;border-radius:13px;border:1px solid var(--rose);background:rgba(196,99,122,.13);color:var(--rose-l);font-family:'Jost',sans-serif;font-size:12px;font-weight:300;letter-spacing:.07em;cursor:pointer;transition:all .3s;text-align:center;}
+.btn-rose:active{background:rgba(196,99,122,.25);transform:scale(.98);}
 
-    /* ── HOME ── */
-    .home-hero{padding:48px 24px 18px;text-align:center;}
-    .home-logo{font-family:'Cormorant Garamond',serif;font-size:clamp(2.8rem,10vw,4.4rem);font-weight:300;color:var(--cream);letter-spacing:-.02em;}
-    .hpulse{display:inline-block;color:var(--rose);font-style:normal;animation:hb 2.6s ease-in-out infinite;filter:drop-shadow(0 0 10px rgba(196,99,122,.5));}
-    @keyframes hb{0%,100%{transform:scale(1);}15%{transform:scale(1.18);}30%{transform:scale(1);}45%{transform:scale(1.08);}60%{transform:scale(1);}}
-    .home-tag{margin-top:7px;font-size:10px;font-weight:200;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);}
+/* ── HOME ── */
+.home-hero{padding:46px 24px 20px;text-align:center;}
+.h-logo{font-family:'Cormorant Garamond',serif;font-size:clamp(2.8rem,11vw,4.5rem);font-weight:300;color:var(--cream);line-height:1;letter-spacing:-.02em;}
+.h-heart{display:inline-block;color:var(--rose);animation:hb 2.8s ease-in-out infinite;filter:drop-shadow(0 0 14px rgba(196,99,122,.55));}
+.h-tag{margin-top:9px;font-size:11px;font-weight:200;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);}
+.conn-pill{display:inline-flex;align-items:center;gap:8px;margin-top:13px;padding:7px 15px;border-radius:30px;border:1px solid rgba(196,99,122,.18);background:rgba(196,99,122,.05);font-size:11px;font-weight:300;color:var(--muted);cursor:pointer;transition:all .3s;}
+.conn-dot{width:7px;height:7px;border-radius:50%;background:#3d3d3d;transition:background .3s;}
+.conn-pill.on .conn-dot{background:var(--green);box-shadow:0 0 8px rgba(111,207,151,.5);animation:pg 1.8s ease infinite;}
+.conn-pill.on{border-color:rgba(111,207,151,.28);color:var(--cream);}
+@keyframes pg{0%,100%{opacity:1;}50%{opacity:.5;}}
 
-    .conn-banner{margin:14px 24px;padding:15px 18px;background:linear-gradient(135deg,rgba(122,58,92,.18),rgba(196,99,122,.09));border:1px solid rgba(176,96,144,.28);border-radius:15px;display:flex;align-items:center;gap:13px;cursor:pointer;transition:all .3s;}
-    .conn-banner:active{transform:scale(.98);}
-    .cdot{width:10px;height:10px;border-radius:50%;background:var(--plum-light);flex-shrink:0;animation:cPulse 2s ease-in-out infinite;}
-    @keyframes cPulse{0%,100%{box-shadow:0 0 0 0 rgba(176,96,144,.5);}50%{box-shadow:0 0 0 8px rgba(176,96,144,0);}}
-    .cdot.online{background:#6ec47a;animation-name:cPulseG;}
-    @keyframes cPulseG{0%,100%{box-shadow:0 0 0 0 rgba(110,196,122,.5);}50%{box-shadow:0 0 0 8px rgba(110,196,122,0);}}
-    .ctext h4{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:400;color:var(--cream);}
-    .ctext p{font-size:11px;font-weight:200;color:var(--muted);margin-top:2px;}
-    .carr{margin-left:auto;color:var(--rose-light);font-size:15px;opacity:.6;}
+.streak-card{margin:13px 24px;padding:19px 22px;background:linear-gradient(135deg,rgba(196,99,122,.1),rgba(201,169,110,.06));border:1px solid rgba(196,99,122,.2);border-radius:18px;display:flex;align-items:center;gap:16px;}
+.s-flame{font-size:40px;filter:drop-shadow(0 0 10px rgba(201,169,110,.4));animation:flicker 1.6s ease-in-out infinite alternate;}
+@keyframes flicker{from{filter:drop-shadow(0 0 6px rgba(201,169,110,.35));transform:rotate(-2deg);}to{filter:drop-shadow(0 0 16px rgba(201,169,110,.65));transform:rotate(2deg);}}
+.s-info h3{font-family:'Cormorant Garamond',serif;font-size:1.9rem;font-weight:400;color:var(--gold-l);}
+.s-info p{font-size:11px;font-weight:200;color:var(--muted);}
 
-    .streak-c{margin:0 24px;padding:19px 22px;background:linear-gradient(135deg,rgba(196,99,122,.12),rgba(201,169,110,.07));border:1px solid rgba(196,99,122,.22);border-radius:17px;display:flex;align-items:center;gap:16px;}
-    .sflame{font-size:40px;animation:flicker 1.6s ease-in-out infinite alternate;}
-    @keyframes flicker{from{filter:drop-shadow(0 0 8px rgba(201,169,110,.4));transform:rotate(-2deg);}to{filter:drop-shadow(0 0 18px rgba(201,169,110,.7));transform:rotate(2deg);}}
-    .sinfo h3{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:400;color:var(--gold-light);}
-    .sinfo p{font-size:11px;font-weight:200;color:var(--muted);}
+/* Mood sync card */
+.mood-sync{margin:13px 24px;padding:18px 20px;background:var(--card);border:1px solid var(--cb);border-radius:16px;}
+.mood-sync .ms-label{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+.mood-sync .ms-row{display:flex;gap:8px;flex-wrap:wrap;}
+.mood-chip{padding:8px 13px;border-radius:20px;border:1px solid rgba(196,99,122,.18);background:transparent;color:var(--muted);font-family:'Jost',sans-serif;font-size:12px;font-weight:300;cursor:pointer;transition:all .3s;}
+.mood-chip.sel{background:rgba(196,99,122,.14);border-color:var(--rose);color:var(--rose-l);}
+.mood-partner{display:flex;align-items:center;gap:10px;margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,.05);}
+.mood-partner .mp-label{font-size:11px;color:var(--muted);font-weight:200;}
+.mood-partner .mp-val{font-size:11px;color:var(--rose-l);font-weight:300;}
 
-    .dq{margin:13px 24px;padding:20px;background:linear-gradient(135deg,rgba(201,169,110,.09),rgba(196,99,122,.05));border:1px solid rgba(201,169,110,.2);border-radius:17px;cursor:pointer;transition:all .3s;}
-    .dq:active{transform:scale(.98);}
-    .dq .dql{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:7px;}
-    .dq .dqt{font-family:'Cormorant Garamond',serif;font-size:1.12rem;font-weight:300;font-style:italic;color:var(--cream);line-height:1.5;}
-    .dq .dqh{margin-top:9px;font-size:11px;font-weight:200;color:var(--muted);}
+.daily-q{margin:13px 24px;padding:20px;background:linear-gradient(135deg,rgba(201,169,110,.07),rgba(196,99,122,.04));border:1px solid rgba(201,169,110,.16);border-radius:16px;cursor:pointer;transition:all .3s;}
+.daily-q:active{transform:scale(.98);}
+.dq-lbl{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:9px;}
+.dq-text{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:300;font-style:italic;color:var(--cream);line-height:1.55;}
+.dq-hint{margin-top:9px;font-size:11px;font-weight:200;color:var(--muted);}
 
-    .qg{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 24px;}
-    .qc{padding:17px;background:var(--card);border:1px solid var(--cb);border-radius:13px;cursor:pointer;transition:all .3s;overflow:hidden;position:relative;}
-    .qc::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(196,99,122,.09),transparent);opacity:0;transition:opacity .3s;}
-    .qc:hover::before,.qc:active::before{opacity:1;}
-    .qc:active{transform:scale(.97);}
-    .qc .qi{font-size:25px;margin-bottom:6px;}
-    .qc h4{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:400;color:var(--cream);}
-    .qc p{margin-top:3px;font-size:11px;font-weight:200;color:var(--muted);}
+.quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;padding:0 24px;}
+.qcard{padding:17px;background:var(--card);border:1px solid var(--cb);border-radius:15px;cursor:pointer;transition:all .3s;position:relative;overflow:hidden;}
+.qcard::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(196,99,122,.08),transparent);opacity:0;transition:opacity .3s;}
+.qcard:active::before{opacity:1;}
+.qcard:active{transform:scale(.97);}
+.qcard .qi{font-size:24px;margin-bottom:6px;}
+.qcard h4{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:400;color:var(--cream);}
+.qcard p{margin-top:2px;font-size:10px;font-weight:200;color:var(--muted);}
 
-    /* ── CONNECT ── */
-    .cs{margin:0 24px 18px;padding:26px 22px;background:linear-gradient(135deg,rgba(122,58,92,.2),rgba(196,99,122,.07));border:1px solid rgba(176,96,144,.23);border-radius:19px;text-align:center;}
-    .cs .csic{font-size:50px;margin-bottom:11px;animation:float 3s ease-in-out infinite;}
-    @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
-    .cs h2{font-family:'Cormorant Garamond',serif;font-size:1.55rem;font-weight:300;color:var(--cream);margin-bottom:5px;}
-    .cs p{font-size:12px;font-weight:200;color:var(--muted);line-height:1.6;}
+/* ── AI ASSISTANT ── */
+.ai-header{padding:52px 24px 0;}
+.ai-intro{padding:16px 24px 0;font-size:12px;font-weight:200;color:var(--muted);line-height:1.8;text-align:center;}
+.profile-preview{margin:14px 24px;padding:18px;background:linear-gradient(135deg,rgba(196,99,122,.08),rgba(201,169,110,.05));border:1px solid rgba(196,99,122,.18);border-radius:16px;}
+.pp-title{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--rose);margin-bottom:10px;}
+.pp-pair{display:flex;gap:10px;}
+.pp-person{flex:1;padding:10px;background:rgba(0,0,0,.2);border-radius:10px;}
+.pp-name{font-family:'Cormorant Garamond',serif;font-size:.95rem;font-weight:400;color:var(--cream);margin-bottom:4px;}
+.pp-tag{font-size:10px;font-weight:200;color:var(--muted);margin-bottom:2px;}
 
-    .pcb{margin:0 24px;padding:19px;background:rgba(255,255,255,.03);border:1px solid rgba(201,169,110,.2);border-radius:15px;text-align:center;}
-    .pcb .pbl{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:9px;}
-    .pc{font-family:'Cormorant Garamond',serif;font-size:2.3rem;font-weight:300;letter-spacing:.26em;color:var(--cream);}
-    .pcb .pbh{margin-top:7px;font-size:11px;font-weight:200;color:var(--muted);}
+.chat-area{padding:0 24px;display:flex;flex-direction:column;gap:12px;min-height:300px;}
+.ai-bubble{max-width:88%;padding:14px 16px;border-radius:18px;font-size:13px;font-weight:300;line-height:1.65;}
+.ai-bubble.ai{align-self:flex-start;background:linear-gradient(135deg,rgba(196,99,122,.12),rgba(122,61,92,.08));border:1px solid rgba(196,99,122,.18);color:var(--text);}
+.ai-bubble.user{align-self:flex-end;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);color:var(--text);}
+.ai-bubble .typing{display:flex;gap:5px;align-items:center;padding:2px 0;}
+.ai-bubble .typing span{width:6px;height:6px;border-radius:50%;background:var(--rose-l);animation:typingDot 1.2s ease infinite;}
+.ai-bubble .typing span:nth-child(2){animation-delay:.2s;}
+.ai-bubble .typing span:nth-child(3){animation-delay:.4s;}
+@keyframes typingDot{0%,60%,100%{transform:translateY(0);opacity:.4;}30%{transform:translateY(-5px);opacity:1;}}
 
-    .or-d{text-align:center;padding:13px;font-size:11px;color:var(--muted);letter-spacing:.1em;}
+.quick-prompts{display:flex;gap:8px;padding:0 24px;overflow-x:auto;scrollbar-width:none;margin-bottom:4px;}
+.quick-prompts::-webkit-scrollbar{display:none;}
+.qp-chip{flex-shrink:0;padding:8px 13px;border-radius:20px;border:1px solid rgba(196,99,122,.18);background:transparent;color:var(--muted);font-family:'Jost',sans-serif;font-size:11px;font-weight:300;cursor:pointer;transition:all .3s;}
+.qp-chip:active{background:rgba(196,99,122,.14);border-color:var(--rose);color:var(--rose-l);}
 
-    .ci-row{display:flex;gap:10px;padding:0 24px;}
-    .cinput{flex:1;padding:13px 15px;background:rgba(255,255,255,.04);border:1px solid rgba(196,99,122,.2);border-radius:12px;color:var(--cream);font-family:'Jost',sans-serif;font-size:15px;font-weight:300;letter-spacing:.15em;outline:none;transition:border-color .3s;text-align:center;text-transform:uppercase;}
-    .cinput:focus{border-color:var(--rose);}
-    .cinput::placeholder{color:var(--muted);letter-spacing:.1em;}
-    .btn-p{padding:13px 18px;background:rgba(196,99,122,.18);border:1px solid var(--rose);border-radius:12px;color:var(--rose-light);font-family:'Jost',sans-serif;font-size:13px;font-weight:300;letter-spacing:.06em;cursor:pointer;transition:all .3s;white-space:nowrap;}
-    .btn-p:active{background:rgba(196,99,122,.34);transform:scale(.97);}
+.ai-input-wrap{position:sticky;bottom:95px;padding:12px 24px;background:linear-gradient(to top,var(--bg) 60%,transparent);z-index:10;}
+.ai-input-row{display:flex;gap:8px;}
+.ai-input{flex:1;padding:13px 16px;background:rgba(255,255,255,.04);border:1px solid rgba(196,99,122,.18);border-radius:14px;color:var(--text);font-family:'Jost',sans-serif;font-size:13px;font-weight:300;outline:none;transition:border-color .3s;}
+.ai-input::placeholder{color:var(--muted);}
+.ai-input:focus{border-color:rgba(196,99,122,.45);}
+.ai-send{width:46px;height:46px;border-radius:13px;border:1px solid rgba(196,99,122,.3);background:rgba(196,99,122,.14);color:var(--rose-l);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .3s;flex-shrink:0;}
+.ai-send:active{transform:scale(.92);}
 
-    .sg{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 24px;}
-    .sc{padding:19px 15px;background:var(--card);border:1px solid var(--cb);border-radius:13px;text-align:center;cursor:pointer;transition:all .3s;}
-    .sc:active{transform:scale(.95);background:rgba(255,255,255,.08);}
-    .sc .si{font-size:29px;margin-bottom:7px;}
-    .sc h4{font-family:'Cormorant Garamond',serif;font-size:.98rem;font-weight:400;color:var(--cream);}
-    .sc p{font-size:11px;font-weight:200;color:var(--muted);margin-top:2px;}
+/* ── HISTORY / TIMELINE ── */
+.timeline{padding:0 24px;display:flex;flex-direction:column;gap:0;}
+.tl-item{display:flex;gap:16px;padding-bottom:24px;position:relative;}
+.tl-item::before{content:'';position:absolute;left:19px;top:38px;bottom:0;width:1px;background:linear-gradient(to bottom,rgba(196,99,122,.2),transparent);}
+.tl-item:last-child::before{display:none;}
+.tl-dot{width:38px;height:38px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:18px;border:1px solid rgba(196,99,122,.2);background:rgba(196,99,122,.07);}
+.tl-content{flex:1;padding-top:6px;}
+.tl-date{font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+.tl-title{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:400;color:var(--cream);}
+.tl-desc{font-size:11px;font-weight:200;color:var(--muted);margin-top:3px;line-height:1.5;}
+.add-memory-btn{margin:8px 24px 20px;display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;background:var(--card);border:1px solid var(--cb);border-radius:14px;color:var(--muted);font-size:12px;font-weight:300;cursor:pointer;transition:all .3s;}
+.add-memory-btn:active{background:rgba(196,99,122,.1);color:var(--rose-l);}
 
-    .dn{margin:13px 24px;padding:20px;background:linear-gradient(135deg,rgba(122,58,92,.14),rgba(196,99,122,.06));border:1px solid rgba(176,96,144,.18);border-radius:17px;}
-    .dn textarea{width:100%;background:transparent;border:none;outline:none;resize:none;color:var(--cream);font-family:'Cormorant Garamond',serif;font-size:1.08rem;font-weight:300;font-style:italic;line-height:1.7;min-height:72px;}
-    .dn textarea::placeholder{color:var(--muted);}
-    .stb{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:11px;padding:10px;background:rgba(176,96,144,.14);border:1px solid rgba(176,96,144,.28);border-radius:12px;color:var(--plum-light);font-size:12px;font-weight:300;letter-spacing:.06em;cursor:pointer;transition:all .3s;}
-    .stb:active{background:rgba(176,96,144,.26);transform:scale(.97);}
+/* ── CONNECT ── */
+.room-setup{padding:20px 24px;}
+.ri{width:100%;padding:13px 17px;background:var(--card);border:1px solid var(--cb);border-radius:13px;color:var(--text);font-family:'Jost',sans-serif;font-size:14px;font-weight:300;outline:none;transition:border-color .3s;margin-bottom:10px;}
+.ri::placeholder{color:var(--muted);}
+.ri:focus{border-color:rgba(196,99,122,.45);}
+.partner-card{padding:20px;margin:0 24px 12px;background:linear-gradient(135deg,rgba(196,99,122,.08),rgba(122,61,92,.05));border:1px solid rgba(196,99,122,.18);border-radius:18px;display:flex;align-items:center;gap:16px;}
+.p-avatar{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--rose),var(--plum));display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;box-shadow:0 0 20px rgba(196,99,122,.28);}
+.p-name{font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:400;color:var(--cream);}
+.p-status{font-size:11px;font-weight:200;color:var(--muted);margin-top:2px;}
+.p-mood{display:inline-block;margin-top:7px;padding:4px 11px;border-radius:20px;background:rgba(196,99,122,.09);border:1px solid rgba(196,99,122,.18);font-size:11px;color:var(--rose-l);}
 
-    .tlist{display:flex;flex-direction:column;gap:9px;padding:0 24px;}
-    .ti{padding:15px 17px;background:var(--card);border:1px solid var(--cb);border-radius:13px;border-left:3px solid var(--rose);}
-    .ti .tf{font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--rose-light);margin-bottom:5px;}
-    .ti .tm{font-family:'Cormorant Garamond',serif;font-size:1.02rem;font-style:italic;font-weight:300;color:var(--cream);line-height:1.5;}
-    .ti .ts{margin-top:5px;font-size:10px;color:var(--muted);}
+.desire-card{margin:0 24px 12px;padding:18px;background:linear-gradient(135deg,rgba(122,61,92,.1),rgba(196,99,122,.05));border:1px solid rgba(122,61,92,.2);border-radius:16px;}
+.dc-label{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--plum-l);margin-bottom:11px;}
+.bar-wrap{position:relative;height:5px;background:rgba(255,255,255,.06);border-radius:3px;margin-bottom:6px;}
+.bar-fill{height:100%;border-radius:3px;background:linear-gradient(to right,var(--rose),var(--plum-l));transition:width .6s ease;}
+.bar-labels{display:flex;justify-content:space-between;font-size:9px;color:var(--muted);}
+.desire-btns{display:flex;gap:7px;margin-top:12px;flex-wrap:wrap;}
+.dbtn{padding:7px 12px;border-radius:20px;border:1px solid rgba(122,61,92,.22);background:transparent;color:var(--muted);font-family:'Jost',sans-serif;font-size:11px;cursor:pointer;transition:all .3s;}
+.dbtn:active{background:rgba(122,61,92,.18);border-color:var(--plum-l);color:var(--plum-l);}
 
-    /* ── IDEAS ── */
-    .ctabs{display:flex;gap:8px;padding:0 24px 13px;overflow-x:auto;scrollbar-width:none;}
-    .ctabs::-webkit-scrollbar{display:none;}
-    .tab{flex-shrink:0;padding:7px 14px;border-radius:20px;border:1px solid rgba(196,99,122,.18);background:transparent;color:var(--muted);font-family:'Jost',sans-serif;font-size:12px;font-weight:300;cursor:pointer;transition:all .3s;}
-    .tab.active{background:rgba(196,99,122,.18);border-color:var(--rose);color:var(--rose-light);}
+.signals-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;padding:0 24px;margin-bottom:12px;}
+.sig-btn{padding:15px 8px;background:var(--card);border:1px solid var(--cb);border-radius:14px;cursor:pointer;transition:all .3s;text-align:center;}
+.sig-btn:active{transform:scale(.92);background:rgba(196,99,122,.1);}
+.sig-icon{font-size:26px;margin-bottom:5px;}
+.sig-lbl{font-size:9px;font-weight:200;color:var(--muted);letter-spacing:.04em;}
 
-    .int-row{display:flex;gap:8px;padding:0 24px 13px;align-items:center;}
-    .int-lbl{font-size:11px;font-weight:200;color:var(--muted);white-space:nowrap;}
-    .ib{padding:6px 13px;border-radius:20px;border:1px solid rgba(196,99,122,.18);background:transparent;color:var(--muted);font-size:11px;font-weight:300;cursor:pointer;transition:all .3s;}
-    .ib.a1{background:rgba(232,137,158,.14);border-color:var(--rose-light);color:var(--rose-light);}
-    .ib.a2{background:rgba(196,99,122,.2);border-color:var(--rose);color:var(--rose-light);}
-    .ib.a3{background:rgba(122,58,92,.28);border-color:var(--plum-light);color:var(--plum-light);}
+.shared-timer{margin:0 24px 12px;padding:20px;background:linear-gradient(135deg,rgba(201,169,110,.07),rgba(196,99,122,.04));border:1px solid rgba(201,169,110,.15);border-radius:16px;text-align:center;}
+.shared-timer h4{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:300;color:var(--cream);margin-bottom:5px;}
+.shared-timer p{font-size:11px;font-weight:200;color:var(--muted);margin-bottom:14px;}
+.sync-num{font-family:'Cormorant Garamond',serif;font-size:2.6rem;font-weight:300;color:var(--gold-l);letter-spacing:-.02em;}
 
-    .shuf{display:flex;align-items:center;justify-content:center;gap:8px;margin:0 24px 13px;padding:12px;background:linear-gradient(135deg,rgba(196,99,122,.13),rgba(201,169,110,.07));border:1px solid rgba(196,99,122,.26);border-radius:13px;color:var(--rose-light);font-size:13px;font-weight:300;letter-spacing:.07em;cursor:pointer;transition:all .3s;}
-    .shuf:active{transform:scale(.97);}
+.msg-area{height:180px;overflow-y:auto;padding:12px;background:rgba(0,0,0,.2);border:1px solid rgba(196,99,122,.09);border-radius:13px;margin-bottom:10px;display:flex;flex-direction:column;gap:7px;scrollbar-width:thin;scrollbar-color:rgba(196,99,122,.2) transparent;}
+.msg{max-width:80%;padding:9px 13px;border-radius:15px;font-size:12px;font-weight:300;line-height:1.5;}
+.msg.mine{align-self:flex-end;background:rgba(196,99,122,.18);border:1px solid rgba(196,99,122,.22);}
+.msg.theirs{align-self:flex-start;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.07);}
+.msg-row{display:flex;gap:7px;padding:0 24px;}
+.msg-input{flex:1;padding:11px 15px;background:var(--card);border:1px solid var(--cb);border-radius:12px;color:var(--text);font-family:'Jost',sans-serif;font-size:12px;font-weight:300;outline:none;}
+.msg-input::placeholder{color:var(--muted);}
+.msg-send{width:42px;height:42px;border-radius:11px;border:1px solid rgba(196,99,122,.28);background:rgba(196,99,122,.13);color:var(--rose-l);font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .3s;flex-shrink:0;}
+.msg-send:active{transform:scale(.92);}
 
-    .il{display:flex;flex-direction:column;gap:9px;padding:0 24px;}
-    .ic{padding:17px;background:var(--card);border:1px solid var(--cb);border-radius:13px;display:flex;align-items:flex-start;gap:13px;cursor:pointer;transition:all .3s;position:relative;overflow:hidden;}
-    .ic::after{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(to bottom,var(--rose),var(--gold));opacity:0;transition:opacity .3s;}
-    .ic:active::after{opacity:1;}
-    .ic:active{transform:scale(.99);background:rgba(255,255,255,.06);}
-    .ic.er{border-color:rgba(176,96,144,.24);}
-    .ic.er::after{background:linear-gradient(to bottom,var(--plum-light),var(--rose));}
-    .ie{font-size:29px;flex-shrink:0;}
-    .ico h4{font-family:'Cormorant Garamond',serif;font-size:1.08rem;font-weight:400;color:var(--cream);}
-    .ico p{margin-top:3px;font-size:12px;font-weight:200;color:var(--muted);line-height:1.5;}
-    .itags{display:flex;gap:5px;margin-top:8px;flex-wrap:wrap;}
-    .itag{padding:3px 8px;border-radius:20px;font-size:10px;font-weight:200;}
-    .itag.r{background:rgba(196,99,122,.1);border:1px solid rgba(196,99,122,.15);color:var(--rose-light);}
-    .itag.g{background:rgba(201,169,110,.1);border:1px solid rgba(201,169,110,.2);color:var(--gold-light);}
-    .itag.pl{background:rgba(176,96,144,.12);border:1px solid rgba(176,96,144,.2);color:var(--plum-light);}
+/* ── IDEAS ── */
+.cat-tabs{display:flex;gap:7px;padding:0 24px 13px;overflow-x:auto;scrollbar-width:none;}
+.cat-tabs::-webkit-scrollbar{display:none;}
+.tab{flex-shrink:0;padding:7px 14px;border-radius:20px;border:1px solid rgba(196,99,122,.16);background:transparent;color:var(--muted);font-family:'Jost',sans-serif;font-size:11px;font-weight:300;letter-spacing:.04em;cursor:pointer;transition:all .3s;}
+.tab.active{background:rgba(196,99,122,.16);border-color:var(--rose);color:var(--rose-l);}
+.tab.hot.active{background:rgba(122,61,92,.18);border-color:var(--plum-l);color:var(--plum-l);}
+.shuffle-btn{display:flex;align-items:center;justify-content:center;gap:8px;margin:0 24px 13px;padding:12px;background:linear-gradient(135deg,rgba(196,99,122,.11),rgba(201,169,110,.07));border:1px solid rgba(196,99,122,.22);border-radius:13px;color:var(--rose-l);font-family:'Jost',sans-serif;font-size:12px;font-weight:300;letter-spacing:.07em;cursor:pointer;transition:all .3s;}
+.shuffle-btn:active{transform:scale(.97);}
+.ideas-list{display:flex;flex-direction:column;gap:9px;padding:0 24px;}
+.idea-card{padding:16px;background:var(--card);border:1px solid var(--cb);border-radius:15px;display:flex;align-items:flex-start;gap:13px;cursor:pointer;transition:all .3s;position:relative;overflow:hidden;}
+.idea-card::after{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(to bottom,var(--rose),var(--gold));opacity:0;transition:opacity .3s;}
+.idea-card.hot::after{background:linear-gradient(to bottom,var(--plum-l),var(--rose));}
+.idea-card:active::after{opacity:1;}
+.idea-card:active{transform:scale(.99);background:rgba(255,255,255,.055);}
+.idea-emoji{font-size:28px;flex-shrink:0;}
+.idea-content h4{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:400;color:var(--cream);}
+.idea-content p{margin-top:3px;font-size:11px;font-weight:200;color:var(--muted);line-height:1.5;}
+.idea-tags{display:flex;gap:5px;margin-top:7px;flex-wrap:wrap;}
+.itag{padding:2px 8px;border-radius:20px;font-size:9px;font-weight:200;}
+.itag.r{background:rgba(196,99,122,.08);border:1px solid rgba(196,99,122,.14);color:var(--rose-l);}
+.itag.g{background:rgba(201,169,110,.08);border:1px solid rgba(201,169,110,.16);color:var(--gold-l);}
+.itag.h{background:rgba(122,61,92,.1);border:1px solid rgba(122,61,92,.22);color:var(--plum-l);}
 
-    /* ── CHALLENGES ── */
-    .chero{margin:0 24px 17px;padding:26px 22px;background:linear-gradient(135deg,rgba(196,99,122,.13),rgba(201,169,110,.07));border:1px solid rgba(196,99,122,.22);border-radius:17px;text-align:center;position:relative;overflow:hidden;}
-    .chero::before{content:'✨';position:absolute;top:13px;right:17px;font-size:21px;opacity:.4;}
-    .chw{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:9px;}
-    .chero h2{font-family:'Cormorant Garamond',serif;font-size:1.42rem;font-weight:300;color:var(--cream);margin-bottom:6px;}
-    .chero p{font-size:12px;font-weight:200;color:var(--muted);line-height:1.6;}
-    .chbtn{display:inline-block;margin-top:13px;padding:9px 21px;background:rgba(196,99,122,.17);border:1px solid var(--rose);border-radius:20px;color:var(--rose-light);font-size:12px;font-weight:300;letter-spacing:.07em;cursor:pointer;transition:all .3s;}
-    .chbtn:active{background:rgba(196,99,122,.3);transform:scale(.97);}
+/* ── CHALLENGES ── */
+.ch-hero{margin:0 24px 16px;padding:26px 20px;background:linear-gradient(135deg,rgba(196,99,122,.11),rgba(201,169,110,.06));border:1px solid rgba(196,99,122,.2);border-radius:18px;text-align:center;position:relative;overflow:hidden;}
+.ch-hero::before{content:'✨';position:absolute;top:11px;right:14px;font-size:20px;opacity:.38;}
+.ch-week{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:7px;}
+.ch-hero h2{font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:400;color:var(--cream);margin-bottom:6px;}
+.ch-hero p{font-size:11px;font-weight:200;color:var(--muted);line-height:1.6;}
+.ch-btn{display:inline-block;margin-top:13px;padding:8px 20px;background:rgba(196,99,122,.16);border:1px solid var(--rose);border-radius:20px;color:var(--rose-l);font-size:11px;font-weight:300;letter-spacing:.07em;cursor:pointer;transition:all .3s;}
+.ch-btn:active{background:rgba(196,99,122,.3);transform:scale(.97);}
+.ch-list{display:flex;flex-direction:column;gap:8px;padding:0 24px;}
+.ch-item{padding:15px;background:var(--card);border:1px solid var(--cb);border-radius:13px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .3s;}
+.ch-item:active{transform:scale(.98);}
+.ch-item.done{opacity:.5;border-color:rgba(201,169,110,.15);}
+.ch-check{width:25px;height:25px;border-radius:50%;border:2px solid rgba(196,99,122,.32);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .3s;font-size:12px;}
+.ch-item.done .ch-check{background:rgba(201,169,110,.13);border-color:var(--gold);color:var(--gold-l);}
+.ch-text h4{font-family:'Cormorant Garamond',serif;font-size:.98rem;font-weight:400;color:var(--cream);}
+.ch-text p{font-size:10px;font-weight:200;color:var(--muted);margin-top:2px;}
 
-    .chl{display:flex;flex-direction:column;gap:9px;padding:0 24px;}
-    .chi{padding:15px;background:var(--card);border:1px solid var(--cb);border-radius:13px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .3s;}
-    .chi:active{transform:scale(.98);}
-    .chi.done{opacity:.54;border-color:rgba(201,169,110,.18);}
-    .chck{width:25px;height:25px;border-radius:50%;border:2px solid rgba(196,99,122,.34);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px;transition:all .3s;}
-    .chi.done .chck{background:rgba(201,169,110,.18);border-color:var(--gold);color:var(--gold-light);}
-    .cht h4{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:400;color:var(--cream);}
-    .cht p{font-size:11px;font-weight:200;color:var(--muted);margin-top:2px;}
+/* ── TIMER ── */
+.timer-wrap{display:flex;flex-direction:column;align-items:center;padding:20px 24px;}
+.t-presets{display:flex;gap:8px;margin-bottom:24px;}
+.tpr{padding:7px 14px;border-radius:20px;border:1px solid rgba(196,99,122,.16);background:transparent;color:var(--muted);font-family:'Jost',sans-serif;font-size:12px;font-weight:300;cursor:pointer;transition:all .3s;}
+.tpr.active{background:rgba(196,99,122,.16);border-color:var(--rose);color:var(--rose-l);}
+.t-ring{position:relative;width:200px;height:200px;margin-bottom:24px;}
+.t-ring svg{position:absolute;inset:0;transform:rotate(-90deg);}
+.r-bg{fill:none;stroke:rgba(196,99,122,.07);stroke-width:3;}
+.r-prog{fill:none;stroke:url(#rg);stroke-width:3;stroke-linecap:round;transition:stroke-dashoffset 1s linear;}
+.t-face{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.t-num{font-family:'Cormorant Garamond',serif;font-size:3.2rem;font-weight:300;color:var(--cream);letter-spacing:-.02em;line-height:1;}
+.t-sub{font-size:10px;font-weight:200;color:var(--muted);letter-spacing:.1em;margin-top:4px;}
+.t-ctrls{display:flex;gap:13px;align-items:center;}
+.tbtn{width:52px;height:52px;border-radius:50%;border:1px solid rgba(196,99,122,.26);background:rgba(196,99,122,.07);color:var(--rose-l);font-size:18px;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;}
+.tbtn.main{width:68px;height:68px;background:rgba(196,99,122,.16);border-color:var(--rose);font-size:23px;box-shadow:0 0 25px rgba(196,99,122,.16);}
+.tbtn:active{transform:scale(.91);}
+.moment-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 24px;margin-top:6px;}
+.mcard{padding:13px;background:var(--card);border:1px solid var(--cb);border-radius:13px;text-align:center;cursor:pointer;transition:all .3s;}
+.mcard:active{transform:scale(.95);}
+.mcard .mi{font-size:21px;margin-bottom:5px;}
+.mcard h4{font-family:'Cormorant Garamond',serif;font-size:.92rem;font-weight:400;color:var(--cream);}
+.mcard p{font-size:10px;font-weight:200;color:var(--muted);margin-top:2px;}
 
-    /* ── TIMER ── */
-    .tw{display:flex;flex-direction:column;align-items:center;padding:18px 24px;}
-    .tpres{display:flex;gap:9px;margin-bottom:22px;}
-    .tp{padding:7px 14px;border-radius:20px;border:1px solid rgba(196,99,122,.2);background:transparent;color:var(--muted);font-family:'Jost',sans-serif;font-size:13px;font-weight:300;cursor:pointer;transition:all .3s;}
-    .tp.active{background:rgba(196,99,122,.2);border-color:var(--rose);color:var(--rose-light);}
+/* ── CHECK-IN ── */
+.checkin-wrap{padding:0 24px;}
+.ci-card{padding:20px;background:var(--card);border:1px solid var(--cb);border-radius:16px;margin-bottom:12px;}
+.ci-q{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:300;color:var(--cream);margin-bottom:12px;line-height:1.45;}
+.ci-scale{display:flex;gap:6px;}
+.ci-dot{flex:1;height:36px;border-radius:10px;border:1px solid rgba(196,99,122,.16);background:transparent;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--muted);}
+.ci-dot.sel{background:rgba(196,99,122,.2);border-color:var(--rose);color:var(--rose-l);}
+.ci-dot:active{transform:scale(.94);}
+.ci-submit{width:100%;margin-top:8px;padding:13px;border-radius:13px;border:1px solid var(--gold);background:rgba(201,169,110,.1);color:var(--gold-l);font-family:'Jost',sans-serif;font-size:12px;font-weight:300;letter-spacing:.07em;cursor:pointer;transition:all .3s;}
+.ci-submit:active{background:rgba(201,169,110,.2);transform:scale(.98);}
+.ci-result{padding:20px;background:linear-gradient(135deg,rgba(196,99,122,.08),rgba(201,169,110,.05));border:1px solid rgba(196,99,122,.18);border-radius:16px;margin-bottom:12px;text-align:center;}
+.ci-result h3{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:300;color:var(--cream);margin-bottom:8px;}
+.ci-result p{font-size:12px;font-weight:200;color:var(--muted);line-height:1.7;}
 
-    .tr{position:relative;width:208px;height:208px;margin-bottom:24px;}
-    .tr svg{position:absolute;inset:0;transform:rotate(-90deg);}
-    .rb{fill:none;stroke:rgba(196,99,122,.1);stroke-width:3;}
-    .rp{fill:none;stroke:url(#rg);stroke-width:3;stroke-linecap:round;transition:stroke-dashoffset 1s linear;}
-    .td{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
-    .tt{font-family:'Cormorant Garamond',serif;font-size:3.2rem;font-weight:300;color:var(--cream);letter-spacing:-.02em;line-height:1;}
-    .tsub{font-size:10px;font-weight:200;color:var(--muted);letter-spacing:.1em;margin-top:4px;}
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(10px);z-index:200;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .3s;}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal{width:100%;background:var(--bg2);border-top:1px solid rgba(196,99,122,.15);border-radius:24px 24px 0 0;padding:20px 24px max(24px,env(safe-area-inset-bottom));transform:translateY(100%);transition:transform .4s cubic-bezier(.32,.72,0,1);max-height:82dvh;overflow-y:auto;}
+.modal-overlay.open .modal{transform:translateY(0);}
+.m-handle{width:36px;height:4px;background:rgba(255,255,255,.1);border-radius:2px;margin:0 auto 17px;}
+.m-title{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:300;color:var(--cream);margin-bottom:5px;}
+.m-sub{font-size:11px;font-weight:200;color:var(--muted);margin-bottom:17px;line-height:1.6;}
+.m-body{font-size:13px;font-weight:300;color:var(--text);line-height:1.75;}
+.m-body p{margin-bottom:10px;}
+.m-close{display:block;width:100%;margin-top:20px;padding:12px;background:rgba(196,99,122,.1);border:1px solid rgba(196,99,122,.22);border-radius:13px;color:var(--rose-l);font-family:'Jost',sans-serif;font-size:12px;font-weight:300;letter-spacing:.05em;cursor:pointer;transition:all .3s;text-align:center;}
+.m-close:active{background:rgba(196,99,122,.2);}
 
-    .tc{display:flex;gap:13px;align-items:center;margin-bottom:22px;}
-    .tb{width:50px;height:50px;border-radius:50%;border:1px solid rgba(196,99,122,.27);background:rgba(196,99,122,.09);color:var(--rose-light);font-size:17px;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;}
-    .tb.main{width:66px;height:66px;background:rgba(196,99,122,.18);border-color:var(--rose);font-size:23px;box-shadow:0 0 28px rgba(196,99,122,.17);}
-    .tb:active{transform:scale(.92);}
+/* ── INCOMING SIGNAL ── */
+.inc-signal{position:fixed;inset:0;z-index:500;display:flex;align-items:center;justify-content:center;pointer-events:none;opacity:0;transition:opacity .3s;background:rgba(0,0,0,.5);backdrop-filter:blur(8px);}
+.inc-signal.show{opacity:1;pointer-events:all;}
+.sig-bubble{background:var(--bg2);border:1px solid rgba(196,99,122,.32);border-radius:24px;padding:34px 38px;text-align:center;transform:scale(.8);transition:transform .4s cubic-bezier(.32,.72,0,1);box-shadow:0 0 60px rgba(196,99,122,.18);}
+.inc-signal.show .sig-bubble{transform:scale(1);}
+.sig-emo{font-size:68px;animation:bounce .6s ease infinite alternate;}
+@keyframes bounce{from{transform:scale(1);}to{transform:scale(1.1);}}
+.sig-bubble h3{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:300;color:var(--cream);margin-top:11px;}
+.sig-bubble p{font-size:11px;font-weight:200;color:var(--muted);margin-top:5px;}
+.sig-bubble button{margin-top:18px;padding:9px 26px;border-radius:20px;border:1px solid var(--rose);background:rgba(196,99,122,.14);color:var(--rose-l);font-family:'Jost',sans-serif;font-size:12px;cursor:pointer;}
 
-    .mg{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 24px;}
-    .mc{padding:14px;background:var(--card);border:1px solid var(--cb);border-radius:13px;text-align:center;cursor:pointer;transition:all .3s;}
-    .mc:active{transform:scale(.95);background:rgba(255,255,255,.07);}
-    .mc .mi{font-size:22px;margin-bottom:5px;}
-    .mc h4{font-family:'Cormorant Garamond',serif;font-size:.95rem;font-weight:400;color:var(--cream);}
-    .mc p{font-size:10px;font-weight:200;color:var(--muted);margin-top:2px;}
+/* ── TOAST ── */
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-90px);background:rgba(26,12,16,.97);border:1px solid rgba(201,169,110,.25);border-radius:12px;padding:11px 19px;font-size:12px;font-weight:300;color:var(--gold-l);z-index:400;transition:transform .4s cubic-bezier(.32,.72,0,1);white-space:nowrap;max-width:90vw;text-align:center;}
+.toast.show{transform:translateX(-50%) translateY(0);}
 
-    /* ── MODAL ── */
-    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(10px);z-index:200;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .3s ease;}
-    .overlay.open{opacity:1;pointer-events:all;}
-    .modal{width:100%;background:var(--bg2);border-top:1px solid rgba(196,99,122,.17);border-radius:24px 24px 0 0;padding:19px 24px max(24px,env(safe-area-inset-bottom));transform:translateY(100%);transition:transform .4s cubic-bezier(.32,.72,0,1);max-height:82dvh;overflow-y:auto;}
-    .overlay.open .modal{transform:translateY(0);}
-    .mh{width:37px;height:4px;background:rgba(255,255,255,.12);border-radius:2px;margin:0 auto 17px;}
-    .mt{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:300;color:var(--cream);margin-bottom:5px;}
-    .ms{font-size:12px;font-weight:200;color:var(--muted);margin-bottom:17px;line-height:1.6;}
-    .mb{font-size:13px;font-weight:300;color:var(--text);line-height:1.75;}
-    .mc-btn{display:block;width:100%;margin-top:19px;padding:13px;background:rgba(196,99,122,.12);border:1px solid rgba(196,99,122,.27);border-radius:13px;color:var(--rose-light);font-family:'Jost',sans-serif;font-size:13px;font-weight:300;letter-spacing:.05em;cursor:pointer;transition:all .3s;text-align:center;}
-    .mc-btn:active{background:rgba(196,99,122,.24);}
+/* ── ADD MEMORY MODAL ── */
+.mem-input{width:100%;padding:12px 15px;background:var(--card);border:1px solid var(--cb);border-radius:12px;color:var(--text);font-family:'Jost',sans-serif;font-size:13px;font-weight:300;outline:none;margin-bottom:9px;transition:border-color .3s;}
+.mem-input::placeholder{color:var(--muted);}
+.mem-input:focus{border-color:rgba(196,99,122,.45);}
+.emoji-pick{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+.ep{font-size:22px;cursor:pointer;padding:6px;border-radius:8px;transition:background .2s;}
+.ep.sel,.ep:active{background:rgba(196,99,122,.18);}
 
-    /* wish match */
-    .wm{display:flex;gap:0;margin-top:15px;border-radius:13px;overflow:hidden;border:1px solid rgba(196,99,122,.2);}
-    .wc{flex:1;padding:14px;}
-    .wc:first-child{border-right:1px solid rgba(196,99,122,.14);}
-    .wc h5{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:9px;}
-    .wi{display:flex;align-items:center;gap:8px;margin-bottom:8px;cursor:pointer;}
-    .wbox{width:16px;height:16px;border-radius:4px;border:1px solid rgba(196,99,122,.34);flex-shrink:0;transition:all .3s;display:flex;align-items:center;justify-content:center;font-size:10px;}
-    .wi.chk .wbox{background:rgba(196,99,122,.28);border-color:var(--rose);color:var(--rose-light);}
-    .wi p{font-size:11px;font-weight:200;color:var(--text);}
-
-    /* toast */
-    .toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-80px);background:rgba(28,11,18,.97);border:1px solid rgba(201,169,110,.3);border-radius:12px;padding:11px 20px;font-size:13px;font-weight:300;color:var(--gold-light);z-index:300;transition:transform .4s cubic-bezier(.32,.72,0,1);white-space:nowrap;max-width:92vw;text-align:center;}
-    .toast.show{transform:translateX(-50%) translateY(0);}
-  </style>
+/* ── NOTIFICATION BADGE ── */
+.badge{position:absolute;top:0;right:4px;width:8px;height:8px;border-radius:50%;background:var(--rose);box-shadow:0 0 6px rgba(196,99,122,.6);}
+</style>
 </head>
 <body>
 <div class="particles" id="particles"></div>
 
-<!-- ════════════════ HOME ════════════════ -->
-<div class="page active" id="page-home">
-  <div class="home-hero">
-    <div class="home-logo">uns<span class="hpulse">♥</span>zeit</div>
-    <div class="home-tag">Zweisamkeit · trotz Alltag</div>
-  </div>
+<!-- ═══════════════ ONBOARDING ═══════════════ -->
+<div id="onboarding">
+  <div class="ob-wrap">
 
-  <div class="conn-banner fs" onclick="goTo('connect')">
-    <div class="cdot" id="homeDot"></div>
-    <div class="ctext">
-      <h4 id="hcTitle">Partner verbinden</h4>
-      <p id="hcSub">Auch auf Distanz verbunden bleiben</p>
-    </div>
-    <div class="carr">→</div>
-  </div>
-
-  <div class="streak-c fs" style="margin-top:12px;">
-    <div class="sflame">🕯️</div>
-    <div class="sinfo"><h3 id="streakN">3</h3><p>Tage Zweisamkeit am Stück</p></div>
-  </div>
-
-  <div class="dq fs" onclick="openModal('question')">
-    <div class="dql">✦ Frage des Tages</div>
-    <div class="dqt" id="dqText">"Was war der schönste Moment heute, den du teilen möchtest?"</div>
-    <div class="dqh">→ Tippe für ein Gespräch</div>
-  </div>
-
-  <div class="sl">Schnelle Momente</div>
-  <div class="qg fs">
-    <div class="qc" onclick="goTo('timer')"><div class="qi">⏱️</div><h4>Unser Moment</h4><p>5 Min nur für euch</p></div>
-    <div class="qc" onclick="goTo('ideas')"><div class="qi">✨</div><h4>Inspirationen</h4><p>Ideen für heute Abend</p></div>
-    <div class="qc" onclick="openModal('kiss')"><div class="qi">💋</div><h4>Kuss-Ritual</h4><p>6 Sekunden · heute?</p></div>
-    <div class="qc" onclick="openModal('wishMatch')"><div class="qi">🔥</div><h4>Wunsch-Match</h4><p>Was wollt ihr heute?</p></div>
-  </div>
-</div>
-
-<!-- ════════════════ CONNECT ════════════════ -->
-<div class="page" id="page-connect">
-  <div class="ph"><h1>Verbunden <span>bleiben</span></h1><p>Auch wenn ihr nicht zusammen seid</p></div>
-
-  <div class="cs fs">
-    <div class="csic" id="csIcon">💫</div>
-    <h2 id="csTitle">Noch nicht verbunden</h2>
-    <p id="csText">Teile deinen Paar-Code mit deinem Partner, um Signale und Gedanken zu teilen.</p>
-  </div>
-
-  <div class="sl">Euer Paar-Code</div>
-  <div class="pcb fs">
-    <div class="pbl">Dein Code</div>
-    <div class="pc" id="myCode">– – – –</div>
-    <div class="pbh">Diesen Code an deinen Partner schicken</div>
-    <br>
-    <button class="btn-p" style="width:100%;margin-top:4px;" onclick="copyCode()">Code kopieren 📋</button>
-  </div>
-
-  <div class="or-d">— oder Partner-Code eingeben —</div>
-  <div class="ci-row fs">
-    <input class="cinput" id="pcInput" placeholder="CODE" maxlength="4" oninput="this.value=this.value.toUpperCase()" />
-    <button class="btn-p" onclick="connectPartner()">Verbinden</button>
-  </div>
-
-  <div class="sl" style="margin-top:16px;">Signal senden</div>
-  <div class="sg fs">
-    <div class="sc" onclick="sig('💭','Ich denke gerade an dich…')"><div class="si">💭</div><h4>Ich denk an dich</h4><p>Ein stilles Signal</p></div>
-    <div class="sc" onclick="sig('💋','Ein Kuss auf Distanz')"><div class="si">💋</div><h4>Fernkuss</h4><p>Kuss geschickt</p></div>
-    <div class="sc" onclick="sig('🔥','Ich vermisse dich…')"><div class="si">🔥</div><h4>Ich vermisse dich</h4><p>Wärme über Distanz</p></div>
-    <div class="sc" onclick="sig('🌙','Gute Nacht, mein Herz')"><div class="si">🌙</div><h4>Gute Nacht</h4><p>Träum von mir</p></div>
-    <div class="sc" onclick="sig('💕','Heute Abend – nur wir zwei?')"><div class="si">💕</div><h4>Date-Einladung</h4><p>Nur wir heute Abend?</p></div>
-    <div class="sc" onclick="sig('🌹','Du machst mein Leben schöner')"><div class="si">🌹</div><h4>Liebesgruß</h4><p>Von Herz zu Herz</p></div>
-  </div>
-
-  <div class="sl">Gedanken schicken</div>
-  <div class="dn fs">
-    <textarea id="tInput" placeholder="Schreib ihm / ihr etwas… ein Gedanke, eine Erinnerung, eine Sehnsucht." rows="3"></textarea>
-    <div class="stb" onclick="sendThought()"><span>✉️</span> Gedanken schicken</div>
-  </div>
-
-  <div class="sl">Angekommen</div>
-  <div class="tlist fs" id="tList">
-    <div class="ti" style="border-left-color:var(--rose);">
-      <div class="tf">💕 Von deinem Partner</div>
-      <div class="tm">"Ich denke gerade an unseren letzten Urlaub… und daran, wie du gelacht hast."</div>
-      <div class="ts">Heute, 11:42</div>
-    </div>
-  </div>
-</div>
-
-<!-- ════════════════ IDEAS ════════════════ -->
-<div class="page" id="page-ideas">
-  <div class="ph"><h1>Ideen für <span>Euch</span></h1><p>Von romantisch bis verführerisch</p></div>
-
-  <div class="ctabs">
-    <div class="tab active" onclick="filterI('all',this)">Alle</div>
-    <div class="tab" onclick="filterI('emotional',this)">💬 Emotional</div>
-    <div class="tab" onclick="filterI('romantic',this)">🌹 Romantisch</div>
-    <div class="tab" onclick="filterI('physical',this)">🤗 Körperlich</div>
-    <div class="tab" onclick="filterI('erotic',this)">🔥 Erotisch</div>
-    <div class="tab" onclick="filterI('quick',this)">⚡ Schnell</div>
-  </div>
-
-  <div class="int-row" id="intRow" style="display:none;">
-    <span class="int-lbl">Intensität:</span>
-    <button class="ib a1" onclick="setInt(1,this)">Sanft</button>
-    <button class="ib" onclick="setInt(2,this)">Verführerisch</button>
-    <button class="ib" onclick="setInt(3,this)">Heiß</button>
-  </div>
-
-  <div class="shuf" onclick="shuffleI()"><span>🎲</span> Überrasch uns!</div>
-  <div class="il" id="iContainer"></div>
-</div>
-
-<!-- ════════════════ CHALLENGES ════════════════ -->
-<div class="page" id="page-challenges">
-  <div class="ph"><h1>Wochen<span>-Challenge</span></h1><p>Kleine Rituale · große Wirkung</p></div>
-  <div class="chero fs">
-    <div class="chw">✦ Diese Woche</div>
-    <h2>Die Nähe &amp; Lust-Woche</h2>
-    <p>7 Tage · emotionale Tiefe und körperliche Verbindung. Jeden Tag ein kleines Ritual.</p>
-    <div class="chbtn" onclick="toast('Woche gestartet! Viel Freude 🌹')">Challenge starten</div>
-  </div>
-  <div class="sl">Aufgaben dieser Woche</div>
-  <div class="chl" id="chList"></div>
-</div>
-
-<!-- ════════════════ TIMER ════════════════ -->
-<div class="page" id="page-timer">
-  <div class="ph"><h1>Unser <span>Moment</span></h1><p>Nur ihr zwei · ohne Ablenkung</p></div>
-  <div class="tw">
-    <div class="tpres">
-      <button class="tp active" onclick="setTimer(5,this)">5 Min</button>
-      <button class="tp" onclick="setTimer(10,this)">10 Min</button>
-      <button class="tp" onclick="setTimer(20,this)">20 Min</button>
-    </div>
-    <div class="tr">
-      <svg viewBox="0 0 208 208">
-        <defs><linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#c4637a"/><stop offset="100%" stop-color="#c9a96e"/></linearGradient></defs>
-        <circle class="rb" cx="104" cy="104" r="98"/>
-        <circle class="rp" id="rProg" cx="104" cy="104" r="98" stroke-dasharray="615.7" stroke-dashoffset="0"/>
-      </svg>
-      <div class="td">
-        <div class="tt" id="tDisp">05:00</div>
-        <div class="tsub" id="tActivity">gemeinsame Zeit</div>
+    <!-- Step 0: Welcome -->
+    <div class="ob-step active" id="ob0">
+      <div class="ob-hero">
+        <div class="ob-logo">uns<span class="heart">♥</span>zeit</div>
+        <div class="ob-tagline">Zweisamkeit · trotz Alltag</div>
+        <div class="ob-desc">Eine App für euch als Paar. Nicht für den Alltag – für die Momente dazwischen, die alles bedeuten.</div>
+      </div>
+      <div style="padding:0 28px;margin-top:auto">
+        <button class="ob-next" onclick="obNext(1)">Loslegen ♥</button>
+        <div style="text-align:center;margin-top:14px"><span style="font-size:11px;color:var(--muted);font-weight:200;cursor:pointer" onclick="skipOnboarding()">Überspringen</span></div>
       </div>
     </div>
-    <div class="tc">
-      <button class="tb" onclick="resetTimer()">↺</button>
-      <button class="tb main" id="tBtn" onclick="toggleTimer()">▶</button>
-      <button class="tb" onclick="openModal('timerTips')">✦</button>
+
+    <!-- Step 1: Name -->
+    <div class="ob-step" id="ob1">
+      <div class="ob-prog" id="prog1"></div>
+      <div class="ob-q-num">Schritt 1 von 7</div>
+      <div class="ob-q-text">Wie heißt du?</div>
+      <div class="ob-q-hint">Nur dein Vorname – wie euer Partner dich nennt.</div>
+      <input class="ob-name-input" id="ob-name" placeholder="Dein Name" />
+      <button class="ob-next" onclick="obSaveName()">Weiter →</button>
+    </div>
+
+    <!-- Step 2: Liebessprache -->
+    <div class="ob-step" id="ob2">
+      <div class="ob-prog" id="prog2"></div>
+      <div class="ob-q-num">Schritt 2 von 7</div>
+      <div class="ob-q-text">Was bedeutet Liebe für dich am meisten?</div>
+      <div class="ob-q-hint">Die "5 Liebessprachen" nach Gary Chapman – wähle deine stärkste.</div>
+      <div class="ob-options" id="q2-opts">
+        <div class="ob-opt" data-val="words" onclick="obSelect(this,'q2')">💬 Worte der Wertschätzung <span class="ob-tag">Lob, Komplimente, "Ich liebe dich" – Worte berühren dich tief</span></div>
+        <div class="ob-opt" data-val="time" onclick="obSelect(this,'q2')">⏱ Gemeinsame Zeit <span class="ob-tag">Ungeteilte Aufmerksamkeit ist für dich das Größte</span></div>
+        <div class="ob-opt" data-val="gifts" onclick="obSelect(this,'q2')">🎁 Geschenke <span class="ob-tag">Durchdachte Gesten und Überraschungen berühren dich</span></div>
+        <div class="ob-opt" data-val="service" onclick="obSelect(this,'q2')">✋ Hilfreiche Handlungen <span class="ob-tag">Wenn jemand für dich da ist und Dinge tut, fühlst du Liebe</span></div>
+        <div class="ob-opt" data-val="touch" onclick="obSelect(this,'q2')">🤗 Körperliche Nähe <span class="ob-tag">Berührung, Umarmung, Nähe – das fühlt sich wie Liebe an</span></div>
+      </div>
+      <button class="ob-next" onclick="obNext(3)">Weiter →</button>
+    </div>
+
+    <!-- Step 3: Intimitätslevel -->
+    <div class="ob-step" id="ob3">
+      <div class="ob-prog" id="prog3"></div>
+      <div class="ob-q-num">Schritt 3 von 7</div>
+      <div class="ob-q-text">Wie wichtig ist dir körperliche Intimität in eurer Beziehung?</div>
+      <div class="ob-q-hint">Ehrlich antworten – niemand sonst sieht das außer euch beiden.</div>
+      <div class="ob-options" id="q3-opts">
+        <div class="ob-opt" data-val="low" onclick="obSelect(this,'q3')">🌙 Eher zweitrangig <span class="ob-tag">Emotionale Verbindung ist mir wichtiger</span></div>
+        <div class="ob-opt" data-val="medium" onclick="obSelect(this,'q3')">💕 Beides ist wichtig <span class="ob-tag">Emotionale und körperliche Nähe ergänzen sich</span></div>
+        <div class="ob-opt" data-val="high" onclick="obSelect(this,'q3')">🔥 Sehr wichtig <span class="ob-tag">Körperliche Verbindung ist ein zentraler Teil unserer Beziehung</span></div>
+        <div class="ob-opt" data-val="varies" onclick="obSelect(this,'q3')">🌊 Je nach Stimmung <span class="ob-tag">Das wechselt – manchmal brauche ich mehr, manchmal weniger</span></div>
+      </div>
+      <button class="ob-next" onclick="obNext(4)">Weiter →</button>
+    </div>
+
+    <!-- Step 4: Abneigungen / Grenzen -->
+    <div class="ob-step" id="ob4">
+      <div class="ob-prog" id="prog4"></div>
+      <div class="ob-q-num">Schritt 4 von 7</div>
+      <div class="ob-q-text">Was magst du gar nicht – auch in liebevollen Momenten?</div>
+      <div class="ob-q-hint">Mehrere Antworten möglich. Diese Information hilft dem Partner, dich zu verstehen.</div>
+      <div class="ob-options" id="q4-opts">
+        <div class="ob-opt multi" data-val="surprise" onclick="obMulti(this,'q4')">😬 Unangekündigte Berührungen <span class="ob-tag">Ich mag es, wenn ich mich auf Nähe einstellen kann</span></div>
+        <div class="ob-opt multi" data-val="pressure" onclick="obMulti(this,'q4')">🚫 Druck oder Erwartungen <span class="ob-tag">Nähe muss freiwillig und entspannt entstehen</span></div>
+        <div class="ob-opt multi" data-val="public" onclick="obMulti(this,'q4')">👀 Zärtlichkeit in der Öffentlichkeit <span class="ob-tag">Intimität gehört für mich ins Private</span></div>
+        <div class="ob-opt multi" data-val="rush" onclick="obMulti(this,'q4')">⏩ Hetze und Ungeduld <span class="ob-tag">Wenn es schnell gehen muss, verliere ich die Verbindung</span></div>
+        <div class="ob-opt multi" data-val="coldness" onclick="obMulti(this,'q4')">❄️ Distanz nach dem Streit <span class="ob-tag">Ich brauche schnell wieder Verbindung nach Konflikten</span></div>
+        <div class="ob-opt multi" data-val="none" onclick="obMulti(this,'q4')">✨ Nichts davon <span class="ob-tag">Ich bin in allem ziemlich offen</span></div>
+      </div>
+      <button class="ob-next" onclick="obNext(5)">Weiter →</button>
+    </div>
+
+    <!-- Step 5: Stressreaktion -->
+    <div class="ob-step" id="ob5">
+      <div class="ob-prog" id="prog5"></div>
+      <div class="ob-q-num">Schritt 5 von 7</div>
+      <div class="ob-q-text">Wenn du gestresst bist – was brauchst du dann von deinem Partner?</div>
+      <div class="ob-q-hint">Das ist eines der wertvollsten Dinge, die ein Partner wissen kann.</div>
+      <div class="ob-options" id="q5-opts">
+        <div class="ob-opt" data-val="space" onclick="obSelect(this,'q5')">🌿 Raum und Stille <span class="ob-tag">Ich brauche Abstand, um mich zu sammeln</span></div>
+        <div class="ob-opt" data-val="presence" onclick="obSelect(this,'q5')">🤗 Einfach da sein <span class="ob-tag">Keine Ratschläge – nur nah sein und zuhören</span></div>
+        <div class="ob-opt" data-val="help" onclick="obSelect(this,'q5')">✋ Praktische Hilfe <span class="ob-tag">Wenn jemand Dinge abnimmt, entspanne ich mich</span></div>
+        <div class="ob-opt" data-val="distract" onclick="obSelect(this,'q5')">🎲 Ablenkung <span class="ob-tag">Lachen, einen Film schauen – weg vom Stress kommen</span></div>
+        <div class="ob-opt" data-val="talk" onclick="obSelect(this,'q5')">💬 Reden <span class="ob-tag">Alles aussprechen, gehört werden, dann wird's besser</span></div>
+      </div>
+      <button class="ob-next" onclick="obNext(6)">Weiter →</button>
+    </div>
+
+    <!-- Step 6: Romantische Vorlieben -->
+    <div class="ob-step" id="ob6">
+      <div class="ob-prog" id="prog6"></div>
+      <div class="ob-q-num">Schritt 6 von 7</div>
+      <div class="ob-q-text">Was lässt dein Herz höher schlagen?</div>
+      <div class="ob-q-hint">Mehrere Antworten möglich – zeig, was dir Freude macht.</div>
+      <div class="ob-options" id="q6-opts">
+        <div class="ob-opt multi" data-val="candles" onclick="obMulti(this,'q6')">🕯️ Kerzenlichtatmosphäre <span class="ob-tag">Gedimmtes Licht, Wärme, Stille</span></div>
+        <div class="ob-opt multi" data-val="dance" onclick="obMulti(this,'q6')">💃 Zusammen tanzen <span class="ob-tag">Auch in der Küche</span></div>
+        <div class="ob-opt multi" data-val="massage" onclick="obMulti(this,'q6')">✋ Massagen <span class="ob-tag">Berührung ohne Erwartung</span></div>
+        <div class="ob-opt multi" data-val="letters" onclick="obMulti(this,'q6')">💌 Briefe & Nachrichten <span class="ob-tag">Wenn jemand Worte für mich findet</span></div>
+        <div class="ob-opt multi" data-val="adventure" onclick="obMulti(this,'q6')">🌙 Spontane Abenteuer <span class="ob-tag">Unerwartetes, Neues erleben</span></div>
+        <div class="ob-opt multi" data-val="cooking" onclick="obMulti(this,'q6')">🍳 Gemeinsam kochen <span class="ob-tag">Nebeneinander in der Küche</span></div>
+      </div>
+      <button class="ob-next" onclick="obNext(7)">Weiter →</button>
+    </div>
+
+    <!-- Step 7: Geheimnis -->
+    <div class="ob-step" id="ob7">
+      <div class="ob-prog" id="prog7"></div>
+      <div class="ob-q-num">Schritt 7 von 7</div>
+      <div class="ob-q-text">Was weiß dein Partner noch nicht, das du ihm/ihr gerne sagen würdest?</div>
+      <div class="ob-q-hint">Das bleibt zunächst dein Geheimnis – der KI-Assistent kann dir helfen, den richtigen Moment zu finden.</div>
+      <textarea class="ob-name-input" id="ob-secret" placeholder="Schreib es hier auf… es bleibt vertraulich" rows="4" style="resize:none;height:110px"></textarea>
+      <button class="ob-next ob-finish" onclick="finishOnboarding()">✨ Profil erstellen</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════ APP ═══════════════ -->
+
+<!-- HOME -->
+<div class="page active" id="page-home">
+  <div class="home-hero">
+    <div class="h-logo">uns<span class="h-heart">♥</span>zeit</div>
+    <div class="h-tag">Zweisamkeit · trotz Alltag</div>
+    <div class="conn-pill" id="connPill" onclick="goTo('connect')">
+      <span class="conn-dot" id="connDot"></span>
+      <span id="connLabel">Nicht verbunden</span>
     </div>
   </div>
-  <div class="sl">Womit möchtet ihr starten?</div>
-  <div class="mg">
-    <div class="mc" onclick="pickAct('Gespräch','💬')"><div class="mi">💬</div><h4>Gespräch</h4><p>Wirklich zuhören</p></div>
-    <div class="mc" onclick="pickAct('Kuscheln','🤗')"><div class="mi">🤗</div><h4>Kuscheln</h4><p>Einfach nah sein</p></div>
-    <div class="mc" onclick="pickAct('Massage','✋')"><div class="mi">✋</div><h4>Massage</h4><p>Entspannung schenken</p></div>
-    <div class="mc" onclick="pickAct('Tanz','💃')"><div class="mi">💃</div><h4>Tanzen</h4><p>In eurer Küche</p></div>
-    <div class="mc" onclick="pickAct('Fantasie teilen','🔥')"><div class="mi">🔥</div><h4>Fantasie teilen</h4><p>Offen & ehrlich</p></div>
-    <div class="mc" onclick="pickAct('Bewusstes Berühren','🫶')"><div class="mi">🫶</div><h4>Bewusstes Berühren</h4><p>Achtsam & langsam</p></div>
+
+  <div class="streak-card fs">
+    <div class="s-flame">🕯️</div>
+    <div class="s-info">
+      <h3 id="streakNum">3</h3>
+      <p>Tage Zweisamkeit am Stück</p>
+    </div>
+  </div>
+
+  <!-- Mood sync -->
+  <div class="mood-sync fs">
+    <div class="ms-label">🌡 Wie geht es dir gerade?</div>
+    <div class="ms-row">
+      <div class="mood-chip" onclick="setMood(this,'😌 Ruhig')">😌 Ruhig</div>
+      <div class="mood-chip" onclick="setMood(this,'💕 Verliebt')">💕 Verliebt</div>
+      <div class="mood-chip" onclick="setMood(this,'😓 Müde')">😓 Müde</div>
+      <div class="mood-chip" onclick="setMood(this,'🌹 Romantisch')">🌹 Romantisch</div>
+      <div class="mood-chip" onclick="setMood(this,'🔥 Sehnsüchtig')">🔥 Sehnsüchtig</div>
+      <div class="mood-chip" onclick="setMood(this,'😤 Gestresst')">😤 Gestresst</div>
+    </div>
+    <div class="mood-partner" id="partnerMoodRow" style="display:none">
+      <span class="mp-label">Partner:</span>
+      <span class="mp-val" id="partnerMoodVal">–</span>
+    </div>
+  </div>
+
+  <div class="daily-q fs" onclick="openModal('question')">
+    <div class="dq-lbl">✦ Frage des Tages</div>
+    <div class="dq-text" id="dailyQText">"Was war der schönste Moment heute, den du mit mir teilen möchtest?"</div>
+    <div class="dq-hint">→ Tippe für ein Gespräch</div>
+  </div>
+
+  <div class="slabel">Schnelle Momente</div>
+  <div class="quick-grid fs">
+    <div class="qcard" onclick="goTo('timer')"><div class="qi">⏱️</div><h4>Unser Moment</h4><p>5 Min nur für euch</p></div>
+    <div class="qcard" onclick="goTo('ai')"><div class="qi">🤖</div><h4>KI-Assistent</h4><p>Personalisierte Tipps</p></div>
+    <div class="qcard" onclick="openModal('kiss')"><div class="qi">💋</div><h4>Kuss-Erinnerung</h4><p>6-Sekunden-Kuss heute?</p></div>
+    <div class="qcard" onclick="goTo('checkin')"><div class="qi">📊</div><h4>Check-in</h4><p>Wie seid ihr gerade?</p></div>
   </div>
 </div>
 
-<!-- Navigation -->
+<!-- AI ASSISTANT -->
+<div class="page" id="page-ai">
+  <div class="ph ai-header">
+    <h1>Euer <span>Assistent</span></h1>
+    <p>Personalisiert für euch als Paar</p>
+  </div>
+  <div class="ai-intro" id="aiIntro">Basierend auf euren Profilen kenne ich bereits eure Liebessprachen, Vorlieben und was euch bewegt.</div>
+
+  <div class="profile-preview fs" id="profilePreview">
+    <div class="pp-title">✦ Eure Profile</div>
+    <div class="pp-pair">
+      <div class="pp-person" id="myProfileCard">
+        <div class="pp-name" id="ppMyName">–</div>
+        <div class="pp-tag" id="ppMyLove">–</div>
+        <div class="pp-tag" id="ppMyStress">–</div>
+      </div>
+      <div class="pp-person">
+        <div class="pp-name">Partner</div>
+        <div class="pp-tag" style="color:var(--muted);font-style:italic">Profil noch nicht erstellt</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="chat-area" id="chatArea"></div>
+
+  <div class="slabel" style="margin-top:6px">Schnelle Fragen</div>
+  <div class="quick-prompts">
+    <div class="qp-chip" onclick="askAI('Was können wir heute Abend tun, um Nähe zu schaffen?')">Heute Abend</div>
+    <div class="qp-chip" onclick="askAI('Wir haben uns gestritten – wie kommen wir wieder zusammen?')">Nach Streit</div>
+    <div class="qp-chip" onclick="askAI('Gib mir eine erotische Idee, die zu uns passt')">Erotische Idee</div>
+    <div class="qp-chip" onclick="askAI('Was sollte mein Partner über mich wissen?')">Mein Profil</div>
+    <div class="qp-chip" onclick="askAI('Wir haben kaum Zeit – was hilft in 5 Minuten?')">Schnell & wirksam</div>
+    <div class="qp-chip" onclick="askAI('Wie kann ich meinem Partner zeigen, dass ich ihn/sie vermisse?')">Sehnsucht zeigen</div>
+  </div>
+
+  <div class="ai-input-wrap">
+    <div class="ai-input-row">
+      <input class="ai-input" id="aiInput" placeholder="Frag mich alles über eure Beziehung…" onkeydown="if(event.key==='Enter')sendToAI()"/>
+      <button class="ai-send" onclick="sendToAI()">↑</button>
+    </div>
+  </div>
+</div>
+
+<!-- HISTORY / TIMELINE -->
+<div class="page" id="page-history">
+  <div class="ph">
+    <h1>Eure <span>Geschichte</span></h1>
+    <p>Die Momente, die euch ausmachen</p>
+  </div>
+
+  <div class="add-memory-btn fs" onclick="openModal('addMemory')">
+    <span style="font-size:18px">＋</span> Erinnerung hinzufügen
+  </div>
+
+  <div class="timeline" id="timelineContainer"></div>
+</div>
+
+<!-- CHECK-IN -->
+<div class="page" id="page-checkin">
+  <div class="ph">
+    <h1>Wochen<span>-Check-in</span></h1>
+    <p>Kurz · ehrlich · verbindend</p>
+  </div>
+
+  <div class="checkin-wrap" id="checkinWrap">
+    <div style="font-size:12px;font-weight:200;color:var(--muted);line-height:1.8;padding:0 0 16px">
+      Jeder beantwortet diese 3 Fragen für sich. Danach zeigt die App, wo ihr gerade harmoniert – und wo vielleicht eine Lücke entstanden ist.
+    </div>
+  </div>
+</div>
+
+<!-- CONNECT -->
+<div class="page" id="page-connect">
+  <div class="ph">
+    <h1>Ver<span>bunden</span></h1>
+    <p>Nah sein, auch getrennt</p>
+  </div>
+
+  <div class="room-setup" id="roomSetup">
+    <p style="font-size:12px;font-weight:200;color:var(--muted);line-height:1.8;margin-bottom:18px">Erstellt einen gemeinsamen Raum. Schickt Küsse, teilt eure Stimmung, startet synchrone Timer – auch wenn ihr nicht zusammen seid.</p>
+    <input class="ri" id="roomName" placeholder="Dein Name"/>
+    <input class="ri" id="roomCode" placeholder="Gemeinsamer Code (z.B. herz2herz)"/>
+    <button class="btn-rose" style="width:100%;margin-bottom:9px" onclick="joinRoom()">Raum betreten ♥</button>
+    <button class="btn-rose" style="width:100%;background:transparent;border-color:rgba(196,99,122,.2);color:var(--muted);font-size:11px" onclick="demoRoom()">Demo ansehen</button>
+  </div>
+
+  <div id="connState" style="display:none">
+    <div class="partner-card">
+      <div class="p-avatar" id="pAvatar">🌸</div>
+      <div>
+        <div class="p-name" id="pName">Partner</div>
+        <div class="p-status">● Online · gerade aktiv</div>
+        <div class="p-mood" id="pMood">Stimmung wird geladen…</div>
+      </div>
+    </div>
+
+    <div class="desire-card">
+      <div class="dc-label">🔥 Sehnsucht-Barometer</div>
+      <div style="display:flex;gap:10px;margin-bottom:9px">
+        <div style="flex:1"><div style="font-size:9px;color:var(--muted);margin-bottom:5px" id="myBarName">Du</div><div class="bar-wrap"><div class="bar-fill" id="myBar" style="width:40%"></div></div></div>
+        <div style="flex:1"><div style="font-size:9px;color:var(--muted);margin-bottom:5px" id="pBarName">Partner</div><div class="bar-wrap"><div class="bar-fill" id="pBar" style="width:60%;opacity:.6"></div></div></div>
+      </div>
+      <div class="bar-labels"><span>Gar nicht</span><span>Ein bisschen</span><span>Sehr</span></div>
+      <div class="desire-btns">
+        <button class="dbtn" onclick="setDesire(20)">😌 Ruhig</button>
+        <button class="dbtn" onclick="setDesire(50)">💕 Zärtlich</button>
+        <button class="dbtn" onclick="setDesire(75)">🌹 Romantisch</button>
+        <button class="dbtn" onclick="setDesire(100)">🔥 Sehr</button>
+      </div>
+    </div>
+
+    <div class="shared-timer">
+      <h4>Synchroner Moment</h4>
+      <p>Startet gleichzeitig denselben Timer – denkt aneinander in eurer Stille.</p>
+      <div class="sync-num" id="syncDisplay">10:00</div>
+      <div style="display:flex;gap:9px;justify-content:center;margin-top:13px">
+        <button class="btn-rose" style="padding:9px 18px;font-size:11px" onclick="startSync()">▶ Gemeinsam starten</button>
+      </div>
+    </div>
+
+    <div class="slabel">Signale senden</div>
+    <div class="signals-grid">
+      <div class="sig-btn" onclick="sendSig('💋','Ein Kuss','Gerade an dich gedacht ♥')"><div class="sig-icon">💋</div><div class="sig-lbl">Kuss</div></div>
+      <div class="sig-btn" onclick="sendSig('🤗','Eine Umarmung','Ich wünschte, ich wäre bei dir')"><div class="sig-icon">🤗</div><div class="sig-lbl">Umarmung</div></div>
+      <div class="sig-btn" onclick="sendSig('💞','Herzschlag','Mein Herz denkt an dich')"><div class="sig-icon">💞</div><div class="sig-lbl">Herzschlag</div></div>
+      <div class="sig-btn" onclick="sendSig('🔥','Sehnsucht','Heute Abend bin ich ganz für dich da')"><div class="sig-icon">🔥</div><div class="sig-lbl">Sehnsucht</div></div>
+      <div class="sig-btn" onclick="sendSig('✨','Ein Gedanke','Du machst meinen Tag schöner')"><div class="sig-icon">✨</div><div class="sig-lbl">Gedanke</div></div>
+      <div class="sig-btn" onclick="openModal('whisper')"><div class="sig-icon">🌙</div><div class="sig-lbl">Flüstern</div></div>
+    </div>
+
+    <div class="slabel">Kurz schreiben</div>
+    <div style="padding:0 24px 8px">
+      <div class="msg-area" id="msgArea"></div>
+      <div class="msg-row">
+        <input class="msg-input" id="msgInput" placeholder="Schreib etwas Schönes…" onkeydown="if(event.key==='Enter')sendMsg()"/>
+        <button class="msg-send" onclick="sendMsg()">↑</button>
+      </div>
+    </div>
+
+    <div style="padding:20px 24px">
+      <button class="btn-rose" style="width:100%;background:transparent;border-color:rgba(196,99,122,.2);color:var(--muted);font-size:11px" onclick="leaveRoom()">Raum verlassen</button>
+    </div>
+  </div>
+</div>
+
+<!-- IDEAS -->
+<div class="page" id="page-ideas">
+  <div class="ph">
+    <h1>Ideen für <span>Euch</span></h1>
+    <p>Von romantisch bis leidenschaftlich</p>
+  </div>
+  <div class="cat-tabs">
+    <div class="tab active" onclick="filterIdeas('all',this)">Alle</div>
+    <div class="tab" onclick="filterIdeas('emotional',this)">💬 Emotional</div>
+    <div class="tab" onclick="filterIdeas('romantic',this)">🌹 Romantisch</div>
+    <div class="tab" onclick="filterIdeas('physical',this)">✋ Körperlich</div>
+    <div class="tab hot" onclick="filterIdeas('erotic',this)">🔥 Erotisch</div>
+    <div class="tab" onclick="filterIdeas('quick',this)">⚡ Schnell</div>
+    <div class="tab" onclick="filterIdeas('adventure',this)">🌙 Abenteuer</div>
+  </div>
+  <div class="shuffle-btn" onclick="shuffleIdea()">🎲 Überrasch mich!</div>
+  <div class="ideas-list" id="ideasList"></div>
+</div>
+
+<!-- CHALLENGES -->
+<div class="page" id="page-challenges">
+  <div class="ph">
+    <h1>Wochen<span>-Challenge</span></h1>
+    <p>Kleine Rituale, große Wirkung</p>
+  </div>
+  <div class="ch-hero fs">
+    <div class="ch-week">✦ Diese Woche</div>
+    <h2>Die Nähe-Woche</h2>
+    <p>7 Tage · 7 kleine Momente echter Verbindung. Keine großen Gesten – nur echte Präsenz.</p>
+    <div class="ch-btn" onclick="toast('Challenge gestartet! 🌹')">Challenge starten</div>
+  </div>
+  <div class="slabel">Aufgaben</div>
+  <div class="ch-list" id="chList"></div>
+</div>
+
+<!-- TIMER -->
+<div class="page" id="page-timer">
+  <div class="ph">
+    <h1>Unser <span>Moment</span></h1>
+    <p>Nur ihr zwei · ohne Ablenkung</p>
+  </div>
+  <div class="timer-wrap">
+    <div class="t-presets">
+      <button class="tpr active" onclick="setTimer(5,this)">5 Min</button>
+      <button class="tpr" onclick="setTimer(10,this)">10 Min</button>
+      <button class="tpr" onclick="setTimer(20,this)">20 Min</button>
+    </div>
+    <div class="t-ring">
+      <svg viewBox="0 0 200 200">
+        <defs><linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#c4637a"/><stop offset="100%" stop-color="#c9a96e"/></linearGradient></defs>
+        <circle class="r-bg" cx="100" cy="100" r="94"/>
+        <circle class="r-prog" id="ringProg" cx="100" cy="100" r="94" stroke-dasharray="590.6" stroke-dashoffset="0"/>
+      </svg>
+      <div class="t-face">
+        <div class="t-num" id="timerDisplay">05:00</div>
+        <div class="t-sub">gemeinsame Zeit</div>
+      </div>
+    </div>
+    <div class="t-ctrls">
+      <button class="tbtn" onclick="resetTimer()">↺</button>
+      <button class="tbtn main" id="timerBtn" onclick="toggleTimer()">▶</button>
+      <button class="tbtn" onclick="openModal('timerTip')">✦</button>
+    </div>
+  </div>
+  <div class="slabel">Was möchtet ihr tun?</div>
+  <div class="moment-grid">
+    <div class="mcard" onclick="toast('💬 Gespräch – viel Freude!')"><div class="mi">💬</div><h4>Gespräch</h4><p>Wirklich zuhören</p></div>
+    <div class="mcard" onclick="toast('🤗 Kuscheln – genießt es!')"><div class="mi">🤗</div><h4>Kuscheln</h4><p>Einfach nah sein</p></div>
+    <div class="mcard" onclick="toast('✋ Massage – schön langsam!')"><div class="mi">✋</div><h4>Massage</h4><p>Entspannung schenken</p></div>
+    <div class="mcard" onclick="toast('💃 Tanz – euer Lied!')"><div class="mi">💃</div><h4>Tanz</h4><p>In eurer Küche</p></div>
+    <div class="mcard" onclick="toast('🕯️ Stille teilen – einfach sein!')"><div class="mi">🕯️</div><h4>Stille</h4><p>Zusammen schweigen</p></div>
+    <div class="mcard" onclick="toast('🌹 Zärtlichkeit – langsam!')"><div class="mi">🌹</div><h4>Zärtlichkeit</h4><p>Langsam und bewusst</p></div>
+  </div>
+</div>
+
+<!-- NAV -->
 <nav>
-  <div class="ni active" onclick="goTo('home')"><span class="ni-icon">♥</span><span class="ni-label">Heute</span></div>
-  <div class="ni" onclick="goTo('connect')"><span class="ni-icon">📡</span><span class="ni-label">Verbunden</span></div>
-  <div class="ni" onclick="goTo('ideas')"><span class="ni-icon">✨</span><span class="ni-label">Ideen</span></div>
-  <div class="ni" onclick="goTo('timer')"><span class="ni-icon">⏱</span><span class="ni-label">Moment</span></div>
-  <div class="ni" onclick="goTo('challenges')"><span class="ni-icon">🎯</span><span class="ni-label">Challenge</span></div>
+  <div class="ni active" id="nav-home" onclick="goTo('home')"><span class="ni-icon">♥</span><span class="ni-label">Heute</span></div>
+  <div class="ni" id="nav-ai" onclick="goTo('ai')"><span class="ni-icon">🤖</span><span class="ni-label">Assistent</span></div>
+  <div class="ni" id="nav-connect" onclick="goTo('connect')" style="position:relative"><span class="ni-icon">💞</span><span class="ni-label">Verbunden</span><div class="badge" id="connBadge" style="display:none"></div></div>
+  <div class="ni" id="nav-ideas" onclick="goTo('ideas')"><span class="ni-icon">✨</span><span class="ni-label">Ideen</span></div>
+  <div class="ni" id="nav-history" onclick="goTo('history')"><span class="ni-icon">📖</span><span class="ni-label">Geschichte</span></div>
 </nav>
 
-<div class="overlay" id="overlay" onclick="closeModal(event)">
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
   <div class="modal">
-    <div class="mh"></div>
-    <div id="mContent"></div>
-    <button class="mc-btn" onclick="closeModal()">Schließen</button>
+    <div class="m-handle"></div>
+    <div id="modalContent"></div>
+    <button class="m-close" onclick="closeModal()">Schließen</button>
   </div>
 </div>
+
+<!-- INCOMING SIGNAL -->
+<div class="inc-signal" id="incSignal">
+  <div class="sig-bubble">
+    <div class="sig-emo" id="sigEmo">💋</div>
+    <h3 id="sigTitle">Ein Kuss</h3>
+    <p id="sigMsg">Gerade an dich gedacht ♥</p>
+    <button onclick="dismissSig()">♥ Empfangen</button>
+  </div>
+</div>
+
+<!-- TOAST -->
 <div class="toast" id="toastEl"></div>
 
 <script>
-// ── DATA ──────────────────────────────────────────────────────────────────────
-const QS = ["Was war der schönste Moment heute, den du mit mir teilen möchtest?","Was liebst du an mir gerade am meisten?","Wann hast du dich zuletzt wirklich von mir gesehen gefühlt?","Was ist eine Sache, die wir als Paar noch gemeinsam erleben wollen?","Welche Berührung von mir magst du am liebsten?","Was wünschst du dir öfter – emotional oder körperlich?","Wo siehst du uns in 10 Jahren?","Was hat dich heute an mir überrascht oder beeindruckt?","Was ist deine schönste Erinnerung an uns – diese Woche?","Was magst du besonders daran, wie wir uns berühren?"];
+// ════════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════════
+let profile = {name:'',love:'',intimacy:'',dislikes:[],stress:'',romantic:[],secret:''};
+let myMood = '';
+let connected = false, myName = '', roomCode = '';
+let syncIv = null, syncRem = 600, syncRunning = false;
+let timerDur = 300, timerRem = 300, timerIv = null, timerRunning = false;
+let curFilter = 'all';
+let chatHistory = [];
 
-const IDEAS = [
-  {e:'💌',t:'Brief schreiben',d:'Schreibt euch je einen Brief auf Papier. Was ihr aneinander liebt, was ihr euch wünscht.',tags:['emotional'],l:['Emotional','20 Min']},
-  {e:'📸',t:'Unser liebstes Foto',d:'Sucht gemeinsam das schönste Foto. Erzählt euch die Geschichte dahinter.',tags:['emotional','quick'],l:['Emotional','Schnell']},
-  {e:'🌅',t:'Früh aufstehen',d:'30 Min früher als die Kinder aufwachen. Nur Kaffee, Stille, ihr zwei.',tags:['emotional','quick'],l:['Emotional','Morgen']},
-  {e:'📖',t:'Vorlesen',d:'Lest euch abwechselnd aus einem Buch vor. Gemütlich, intim, verbindend.',tags:['emotional'],l:['Emotional','Gemütlich']},
-  {e:'🌙',t:'Sternstunden',d:'Legt euch draußen hin und schaut in den Himmel. Keine Handys. Nur ihr.',tags:['romantic','emotional'],l:['Romantisch','30 Min']},
-  {e:'🍳',t:'Gemeinsam kochen',d:'Ein neues Rezept zusammen ausprobieren – chaotisch, lustig und nah.',tags:['romantic','emotional'],l:['Romantisch','Spaß']},
-  {e:'🌹',t:'Überraschungs-Date',d:'Einer plant alles geheim. Auch zuhause – Kerzen, Musik, sein Lieblingsessen.',tags:['romantic'],l:['Romantisch','Abenteuer']},
-  {e:'🌃',t:'Nächtlicher Spaziergang',d:'Wenn die Kinder schlafen: raus in die Nacht. Hand in Hand. Gespräche wie früher.',tags:['romantic','emotional'],l:['Romantisch','Abend']},
-  {e:'💆',t:'Kopfmassage',d:'Kopf in den Schoß legen. Sanftes Massieren, kein Ziel, nur Nähe.',tags:['physical','quick'],l:['Körperlich','Schnell']},
-  {e:'💃',t:'Küchentanz',d:'Euer Lied anmachen und einfach tanzen – so, wie ihr seid.',tags:['physical','romantic','quick'],l:['Romantisch','Schnell']},
-  {e:'🫂',t:'20-Sekunden-Umarmung',d:'20 Sekunden echte Umarmung setzt Oxytocin frei. Einfach jetzt loslegen.',tags:['physical','quick'],l:['Körperlich','Jetzt']},
-  {e:'✋',t:'Rückenmassage',d:'5 Minuten fokussiert auf den Rücken des anderen. Kein Ziel außer Wärme.',tags:['physical'],l:['Körperlich','Entspannung']},
-  // erotic intensity 1
-  {e:'🕯️',t:'Kerzenbad',d:'Badewanne, Kerzen, leise Musik. Wechselt euch beim Massieren der Schultern und des Nackens ab.',tags:['erotic','romantic'],l:['Sanft','Romantisch'],inten:1},
-  {e:'💋',t:'2-Minuten-Kuss',d:'Timer auf 2 Minuten – bewusst küssen, ohne Eile, ohne Ziel. Nur dieser Moment.',tags:['erotic','quick'],l:['Sanft','Schnell'],inten:1},
-  {e:'👁️',t:'Blickkontakt-Ritual',d:'Sitzt euch gegenüber. 2 Minuten lang in die Augen schauen, ohne zu sprechen. Tiefe Verbindung.',tags:['erotic','emotional'],l:['Sanft','Intensiv'],inten:1},
-  {e:'🌸',t:'Achtsames Berühren',d:'Einer liegt, der andere erkundet den Körper ganz langsam – nur mit den Fingerspitzen. Kein Ziel, nur Neugier.',tags:['erotic','physical'],l:['Sanft','Körperlich'],inten:1},
-  // erotic intensity 2
-  {e:'🔮',t:'Fantasie-Abend',d:'Jeder schreibt 3 Wünsche auf einen Zettel. Die Zettel werden getauscht – und man darf einen erfüllen.',tags:['erotic'],l:['Verführerisch','Spiel'],inten:2},
-  {e:'🎭',t:'Verführungs-Ritual',d:'Einer verführt den anderen bewusst – mit Blicken, Worten, langsamen Berührungen. Kein Eilen erlaubt.',tags:['erotic'],l:['Verführerisch','Bewusst'],inten:2},
-  {e:'💄',t:'Dressing up',d:'Überrascht euch: Lieblingsoutfit des anderen anziehen. Sagt, was daran so anziehend ist.',tags:['erotic','romantic'],l:['Verführerisch','Romantisch'],inten:2},
-  {e:'📻',t:'Playlist der Lust',d:'Jeder wählt 5 Songs, die ihn erregen. Gemeinsam hören – und erzählen warum.',tags:['erotic'],l:['Verführerisch','Emotional'],inten:2},
-  // erotic intensity 3
-  {e:'🌡️',t:'Wunsch-Würfel',d:'Schreibt je 6 Wünsche auf – was ihr euch voneinander wünscht. Würfelt und erfüllt.',tags:['erotic'],l:['Heiß','Spiel'],inten:3},
-  {e:'🪄',t:'10-Minuten-Regel',d:'Ihr dürft euch 10 Minuten lang nur berühren – alles andere ist verboten. Spannung aufbauen.',tags:['erotic'],l:['Heiß','Intensiv'],inten:3},
-  {e:'🔥',t:'Rollenspiel',d:'Wählt eine Rolle, die ihr im Alltag nie spielt – und lebt sie für einen Abend. Sicher, einvernehmlich, aufregend.',tags:['erotic'],l:['Heiß','Abenteuer'],inten:3},
-  {e:'🗺️',t:'Körperkarte',d:'Erkundet langsam und achtsam alles, was dem anderen gut tut. Gebt Feedback – leise, ehrlich, offen.',tags:['erotic','physical'],l:['Heiß','Körperlich'],inten:3},
+const CHECKIN_QS = [
+  {q:'Wie verbunden habe ich mich diese Woche mit meinem Partner gefühlt?',scale:['😞','😐','🙂','😊','🥰']},
+  {q:'Wie gut haben wir in dieser Woche miteinander kommuniziert?',scale:['😞','😐','🙂','😊','🌟']},
+  {q:'Wie sehr habe ich diese Woche das Gefühl, dass mein Partner meine Bedürfnisse versteht?',scale:['😞','😐','🙂','😊','💕']},
+];
+let checkinAnswers = [null,null,null];
+
+const QUESTIONS = [
+  "Was war der schönste Moment heute, den du mit mir teilen möchtest?",
+  "Was liebst du an mir gerade am meisten?",
+  "Wann hast du dich zuletzt wirklich von mir gesehen gefühlt?",
+  "Was wünschst du dir öfter von mir?",
+  "Was ist eine Sache, die wir als Paar noch erleben wollen?",
+  "Was macht mich für dich unersetzlich?",
+  "Welcher Moment in unserer Beziehung hat dich am meisten überrascht?",
+];
+
+let memories = [
+  {emoji:'💍', title:'Unser erster gemeinsamer Urlaub', desc:'Das Meer, die Wärme, die Stille zwischen uns', date:'Sommer 2021'},
+  {emoji:'🌧️', title:'Der Regentag auf dem Sofa', desc:'Film, Decke, Tee – einfach perfekt', date:'November 2022'},
+  {emoji:'👶', title:'Als wir erfuhren, dass wir Eltern werden', desc:'Dieser Blick, den wir uns gaben', date:'März 2023'},
 ];
 
 const CHALLENGES = [
-  {e:'💬',t:'10 Min ohne Handy',d:'Abends – einfach miteinander reden',done:false},
-  {e:'💋',t:'Guten-Morgen-Kuss',d:'Jeden Tag, bevor die Hektik beginnt',done:true},
-  {e:'✋',t:'Rücken-Massage',d:'5 Minuten für den anderen',done:false},
-  {e:'💌',t:'Gedanken schicken',d:'„Ich denke gerade an dich"',done:true},
-  {e:'🌙',t:'Bewusst einschlafen',d:'Nicht am Handy – nah beieinander',done:false},
-  {e:'🔥',t:'Einen Wunsch teilen',d:'Erotisch oder emotional – ehrlich sein',done:false},
-  {e:'✨',t:'Danke sagen',d:'Für etwas ganz Kleines von heute',done:false},
+  {emoji:'💬',title:'10 Minuten ohne Handy',desc:'Abends, einfach miteinander reden',done:false},
+  {emoji:'💋',title:'6-Sekunden-Kuss',desc:'Jeden Morgen, bevor die Hektik beginnt',done:true},
+  {emoji:'✋',title:'Rücken-Massage',desc:'5 Minuten füreinander',done:false},
+  {emoji:'💌',title:'Nachricht schicken',desc:'"Ich denke gerade an dich" – jetzt',done:true},
+  {emoji:'🌙',title:'Bewusst einschlafen',desc:'Nicht beide am Handy – nah beieinander',done:false},
+  {emoji:'🎵',title:'Ein Lied teilen',desc:'Das euch gerade beschreibt',done:false},
+  {emoji:'🔥',title:'Sehnsucht zeigen',desc:'Sagt einander, was ihr körperlich aneinander liebt',done:false},
 ];
 
-const WISHES = ['Länger küssen','Massage','Langsam vorgehen','Licht anlassen','Draußen','Neue Idee ausprobieren','Rollenspiel','Nur berühren','Musik dazu','Überraschung'];
+const IDEAS = [
+  {emoji:'💌',title:'Brief schreiben',desc:'Auf echtem Papier. Was ihr aneinander liebt, was ihr euch wünscht. Keine Autocorrect-Romantik.',tags:['emotional'],labels:['Emotional','Jederzeit']},
+  {emoji:'📸',title:'Unser liebstes Foto',desc:'Sucht zusammen das schönste Foto von euch. Erzählt euch die Geschichte dahinter.',tags:['emotional','quick'],labels:['Emotional','Schnell']},
+  {emoji:'📖',title:'Vorlesen',desc:'Lest euch abwechselnd aus einem Buch vor – gemütlich, verbindend, intim ohne körperlich zu sein.',tags:['emotional','quick'],labels:['Emotional','Gemütlich']},
+  {emoji:'🎲',title:'Wahrheit oder Pflicht',desc:'Die ehrliche Paare-Version. Fragen, die wirklich neugierig machen. Antwortet, als hättet ihr euch gerade erst kennengelernt.',tags:['emotional','adventure'],labels:['Abenteuer','Spaß']},
+  {emoji:'🌅',title:'Frühaufstehen',desc:'30 Min vor den Kindern aufstehen. Nur Kaffee, Stille und ihr zwei. Diese Momente sind Gold.',tags:['emotional','quick'],labels:['Emotional','Morgen']},
+  {emoji:'🌙',title:'Sternstunden',desc:'Legt euch draußen hin und schaut in den Himmel. Keine Handys. Nur ihr.',tags:['romantic','emotional'],labels:['Romantisch','30 Min']},
+  {emoji:'🕯️',title:'Kerzenabend',desc:'Alle Lichter aus. Nur Kerzen. Kein Plan – nur Wein, Stille und Nähe.',tags:['romantic','physical'],labels:['Romantisch','Abends']},
+  {emoji:'🌹',title:'Überraschungs-Date',desc:'Einer plant alles geheim, der andere lässt sich überraschen. Auch zuhause: Tisch gedeckt, Lieblingsgericht.',tags:['romantic','adventure'],labels:['Romantisch','Abenteuer']},
+  {emoji:'🌃',title:'Nächtlicher Spaziergang',desc:'Wenn die Kinder schlafen – raus in die Nacht. Hand in Hand. Gespräche wie früher.',tags:['romantic','adventure','emotional'],labels:['Romantisch','Abenteuer']},
+  {emoji:'🍳',title:'Gemeinsam kochen',desc:'Etwas Neues – kein Rezept kennen, gemeinsam improvisieren, Musik an, Wein dabei.',tags:['romantic','emotional'],labels:['Romantisch','Spaß']},
+  {emoji:'💆',title:'Kopfmassage',desc:'Legt den Kopf in den Schoß des anderen. Sanftes Massieren – kein Ziel, nur Nähe.',tags:['physical','quick'],labels:['Körperlich','Schnell']},
+  {emoji:'🫂',title:'20-Sekunden-Umarmung',desc:'20 Sekunden echte Umarmung setzt Oxytocin frei. Nicht loslassen, bis ihr beide ruhiger seid.',tags:['physical','quick'],labels:['Körperlich','Jetzt']},
+  {emoji:'💃',title:'Küchentanz',desc:'Euer gemeinsames Lied, Lautstärke auf, tanzt in der Küche – so unelegant und schön wie ihr seid.',tags:['physical','romantic','quick'],labels:['Körperlich','Romantisch']},
+  {emoji:'✋',title:'Fußmassage tauschen',desc:'10 Minuten jeder. Öl, warme Hände, kein Stress. Eine der wirksamsten Formen von Fürsorge.',tags:['physical'],labels:['Körperlich','20 Min']},
+  {emoji:'🛁',title:'Ritualbad',desc:'Badeschaum, Kerzen, gedimmtes Licht. Zusammen entspannen – kein Ziel, einfach da sein.',tags:['physical','romantic'],labels:['Körperlich','Romantisch']},
+  {emoji:'🔥',title:'Langsamer Kuss',desc:'Timer auf 2 Minuten. Küsst euch – langsam, bewusst, ohne Eile. Keine Hände, nur Lippen. Beobachtet, was passiert.',tags:['erotic','physical','quick'],labels:['Erotisch','Schnell'],hot:true},
+  {emoji:'🌹',title:'Wunschzettel',desc:'Jeder schreibt anonym 3 Wünsche auf – erotisch oder zärtlich. Tauscht die Zettel aus. Keine Urteile, nur Neugier.',tags:['erotic','emotional'],labels:['Erotisch','Offen'],hot:true},
+  {emoji:'🕯️',title:'Massage im Kerzenschein',desc:'Massageöl, Kerzen, Musik. Einer gibt, einer empfängt vollständig. Dann wechseln. Mindestens 20 Minuten pro Person.',tags:['erotic','physical'],labels:['Erotisch','Körperlich'],hot:true},
+  {emoji:'💋',title:'Körperkarte',desc:'Erkundet achtsam, was dem anderen gut tut. Kommuniziert nur durch Reaktionen. Kein Ziel – nur Aufmerksamkeit.',tags:['erotic','physical'],labels:['Erotisch','Intim'],hot:true},
+  {emoji:'📝',title:'Fantasie teilen',desc:'Jeder erzählt eine erotische Fantasie – so viel wie man möchte. Kein Druck. Das Gespräch selbst ist schon Intimität.',tags:['erotic','emotional'],labels:['Erotisch','Emotional'],hot:true},
+  {emoji:'🎲',title:'Erotisches Würfelspiel',desc:'Würfel 1: Körperstelle. Würfel 2: Aktion (küssen, massieren, streicheln…). 3 Minuten Timer. Dann wechseln.',tags:['erotic','adventure'],labels:['Erotisch','Spiel'],hot:true},
+  {emoji:'🌙',title:'Langsamer Abend',desc:'Kein Handy, kein Netflix. Zieht euch bewusst langsam aus. Startet mit einem Glas Wein. Lasst alles ohne Hetze entstehen.',tags:['erotic','romantic'],labels:['Erotisch','Romantisch'],hot:true},
+  {emoji:'🎵',title:'Playlist für euch',desc:'Erstellt gemeinsam eine Playlist – Lieder, die ihr verbindet, die erotisch aufgeladen sind. Hört sie zusammen im Dunkeln.',tags:['erotic','romantic'],labels:['Erotisch','Stimmung'],hot:true},
+  {emoji:'🎭',title:'Rollenspiel: Erstes Treffen',desc:'Tut so, als würdet ihr euch heute zum ersten Mal treffen. Verabredet euch in einem Café oder zu Hause – und spielt es durch.',tags:['adventure','erotic'],labels:['Abenteuer','Erotisch'],hot:true},
+];
 
-// ── STATE ─────────────────────────────────────────────────────────────────────
-let myCode='', connected=false, curFilter='all', curInt=0;
-let tDur=300, tRem=300, tIv=null, tRun=false;
-let wish={};
+const LOVE_LABELS = {words:'Worte der Wertschätzung',time:'Gemeinsame Zeit',gifts:'Geschenke',service:'Hilfreiche Handlungen',touch:'Körperliche Nähe'};
+const STRESS_LABELS = {space:'Raum & Stille',presence:'Einfach da sein',help:'Praktische Hilfe',distract:'Ablenkung',talk:'Reden'};
 
-// ── BOOT ──────────────────────────────────────────────────────────────────────
-addEventListener('DOMContentLoaded',()=>{
-  initP(); genCode(); renderI(); renderCh();
-  document.getElementById('dqText').textContent=`"${QS[new Date().getDay()%QS.length]}"`;
-  updTimer(); setTimeout(fade,80);
-  if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
-});
-
-// ── PARTICLES ─────────────────────────────────────────────────────────────────
-function initP(){
-  const c=document.getElementById('particles');
-  for(let i=0;i<20;i++){
-    const p=document.createElement('div'); p.className='particle';
-    const col=Math.random()>.5?'#c4637a':'#c9a96e';
-    p.style.cssText=`left:${Math.random()*100}%;width:${1+Math.random()*2}px;height:${1+Math.random()*2}px;background:${col};animation-delay:${Math.random()*10}s;animation-duration:${9+Math.random()*10}s;`;
+// ════════════════════════════════════════════════
+// PARTICLES
+// ════════════════════════════════════════════════
+(function(){
+  const c = document.getElementById('particles');
+  for(let i=0;i<18;i++){
+    const p=document.createElement('div');p.className='particle';
+    p.style.cssText=`left:${Math.random()*100}%;width:${1+Math.random()*2}px;height:${1+Math.random()*2}px;animation-delay:${Math.random()*10}s;animation-duration:${9+Math.random()*12}s;background:${Math.random()>.5?'#c4637a':'#c9a96e'};`;
     c.appendChild(p);
+  }
+})();
+
+// ════════════════════════════════════════════════
+// ONBOARDING
+// ════════════════════════════════════════════════
+let obAnswers = {};
+function buildProgress(step){
+  for(let s=1;s<=7;s++){
+    const el=document.getElementById(`prog${s}`);
+    if(!el)return;
+    let html='';
+    for(let i=1;i<=7;i++) html+=`<div class="ob-prog-dot ${i<step?'done':i===step?'active':''}"></div>`;
+    el.innerHTML=html;
+  }
+}
+function obNext(step){
+  document.querySelectorAll('.ob-step').forEach(e=>e.classList.remove('active'));
+  const el=document.getElementById(`ob${step}`);
+  if(el){el.classList.add('active');buildProgress(step);}
+}
+function obSaveName(){
+  const n=document.getElementById('ob-name').value.trim();
+  if(!n){toast('Bitte gib deinen Namen ein');return;}
+  profile.name=n; obNext(2);
+}
+function obSelect(el,q){
+  el.closest('.ob-options').querySelectorAll('.ob-opt').forEach(o=>o.classList.remove('sel'));
+  el.classList.add('sel');
+  obAnswers[q]=el.dataset.val;
+}
+function obMulti(el,q){
+  el.classList.toggle('sel');
+  if(!obAnswers[q])obAnswers[q]=[];
+  const v=el.dataset.val;
+  if(el.classList.contains('sel')){if(!obAnswers[q].includes(v))obAnswers[q].push(v);}
+  else{obAnswers[q]=obAnswers[q].filter(x=>x!==v);}
+}
+function finishOnboarding(){
+  profile.love=obAnswers.q2||'time';
+  profile.intimacy=obAnswers.q3||'medium';
+  profile.dislikes=obAnswers.q4||[];
+  profile.stress=obAnswers.q5||'presence';
+  profile.romantic=obAnswers.q6||[];
+  profile.secret=document.getElementById('ob-secret').value.trim();
+  localStorage.setItem('unszeit_profile',JSON.stringify(profile));
+  document.getElementById('onboarding').classList.add('hidden');
+  initApp();
+  toast('Willkommen, '+profile.name+' 🌹');
+}
+function skipOnboarding(){
+  profile.name='Du';
+  document.getElementById('onboarding').classList.add('hidden');
+  initApp();
+}
+
+// ════════════════════════════════════════════════
+// INIT APP
+// ════════════════════════════════════════════════
+function initApp(){
+  renderIdeas();
+  renderChallenges();
+  renderTimeline();
+  renderCheckin();
+  updateProfileUI();
+  document.getElementById('dailyQText').textContent=`"${QUESTIONS[new Date().getDay()%QUESTIONS.length]}"`;
+  updateTimerUI();
+  setTimeout(activateFades,80);
+  // Initial AI greeting
+  setTimeout(()=>addAIBubble(getWelcomeMsg()),600);
+}
+function updateProfileUI(){
+  document.getElementById('ppMyName').textContent=profile.name||'Du';
+  document.getElementById('ppMyLove').textContent=profile.love?'💕 '+LOVE_LABELS[profile.love]:'–';
+  document.getElementById('ppMyStress').textContent=profile.stress?'🌿 Bei Stress: '+STRESS_LABELS[profile.stress]:'–';
+  document.getElementById('myBarName').textContent=profile.name||'Du';
+}
+function getWelcomeMsg(){
+  if(!profile.name||profile.name==='Du') return '♥ Hallo! Ich bin euer persönlicher Beziehungsassistent. Erstellt zuerst eure Profile, damit ich euch wirklich kennenlernen kann. Was kann ich für euch tun?';
+  const love=profile.love?`Ich weiß, dass deine Liebessprache **${LOVE_LABELS[profile.love]}** ist`:'';
+  const stress=profile.stress?` und bei Stress brauchst du **${STRESS_LABELS[profile.stress]}`:'';
+  return `♥ Hallo ${profile.name}! ${love}${stress}**. Basierend auf deinem Profil kann ich euch personalisierte Ideen und Ratschläge geben. Was möchtest du wissen?`;
+}
+
+// ════════════════════════════════════════════════
+// NAVIGATION
+// ════════════════════════════════════════════════
+const PAGES=['home','ai','connect','ideas','history','challenges','timer','checkin'];
+function goTo(name){
+  PAGES.forEach(p=>{
+    const el=document.getElementById('page-'+p);
+    const ni=document.getElementById('nav-'+p);
+    if(el)el.classList.remove('active');
+    if(ni)ni.classList.remove('active');
+  });
+  const page=document.getElementById('page-'+name);
+  const nav=document.getElementById('nav-'+name);
+  if(page)page.classList.add('active');
+  if(nav)nav.classList.add('active');
+  window.scrollTo(0,0);
+  setTimeout(activateFades,60);
+}
+function activateFades(){
+  document.querySelectorAll('.page.active .fs').forEach((el,i)=>{
+    setTimeout(()=>el.classList.add('visible'),i*80);
+  });
+}
+
+// ════════════════════════════════════════════════
+// MOOD
+// ════════════════════════════════════════════════
+function setMood(el,mood){
+  document.querySelectorAll('.mood-chip').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');
+  myMood=mood;
+  toast('Stimmung geteilt: '+mood);
+  // simulate partner seeing it if connected
+  if(connected){
+    document.getElementById('partnerMoodRow').style.display='flex';
+    document.getElementById('pMood').textContent='Stimmung: '+mood;
   }
 }
 
-// ── NAV ───────────────────────────────────────────────────────────────────────
-function goTo(n){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.ni').forEach(x=>x.classList.remove('active'));
-  document.getElementById('page-'+n).classList.add('active');
-  const ord=['home','connect','ideas','timer','challenges'];
-  const idx=ord.indexOf(n); if(idx>=0) document.querySelectorAll('.ni')[idx].classList.add('active');
-  window.scrollTo(0,0); setTimeout(fade,50);
-}
-function fade(){document.querySelectorAll('.page.active .fs').forEach((el,i)=>setTimeout(()=>el.classList.add('v'),i*65));}
+// ════════════════════════════════════════════════
+// AI ASSISTANT
+// ════════════════════════════════════════════════
+function buildSystemPrompt(){
+  const p=profile;
+  return `Du bist ein einfühlsamer, warmer Beziehungsassistent für ein Paar namens "${p.name||'das Paar'}" und ihren Partner.
 
-// ── CONNECT ───────────────────────────────────────────────────────────────────
-function genCode(){
-  const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  myCode=Array.from({length:4},()=>c[Math.floor(Math.random()*c.length)]).join('');
-  document.getElementById('myCode').textContent=myCode.split('').join(' ');
-}
-function copyCode(){navigator.clipboard?.writeText(myCode).catch(()=>{});toast(`Code ${myCode} kopiert! 📋`);}
-function connectPartner(){
-  const v=document.getElementById('pcInput').value.trim();
-  if(v.length<4){toast('Bitte 4-stelligen Code eingeben');return;}
-  connected=true;
-  document.getElementById('csIcon').textContent='💑';
-  document.getElementById('csTitle').textContent='Verbunden!';
-  document.getElementById('csText').textContent=`Partner mit Code ${v} verbunden. Ihr könnt jetzt Signale und Gedanken teilen.`;
-  document.getElementById('homeDot').classList.add('online');
-  document.getElementById('hcTitle').textContent='Partner verbunden ✓';
-  document.getElementById('hcSub').textContent='Online – Signal senden?';
-  toast('💑 Verbunden! Schickt euch ein Signal.');
-}
-function sig(emoji,msg){
-  if(!connected){toast('Zuerst Partner verbinden 💫');return;}
-  addT('Du',`${emoji} ${msg}`,true); toast(`${emoji} Signal gesendet!`);
-}
-function sendThought(){
-  const inp=document.getElementById('tInput'), txt=inp.value.trim();
-  if(!txt){toast('Schreib zuerst etwas ✨');return;}
-  if(!connected){toast('Zuerst Partner verbinden 💫');return;}
-  addT('Du',txt,true); inp.value=''; toast('💌 Gedanke gesendet!');
-}
-function addT(from,msg,sent=false){
-  const list=document.getElementById('tList');
-  const now=new Date(), ts=`Heute, ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
-  const d=document.createElement('div'); d.className='ti';
-  d.style.borderLeftColor=sent?'var(--gold)':'var(--rose)';
-  d.innerHTML=`<div class="tf">${sent?'✉️ Du':' 💕 Von deinem Partner'}</div><div class="tm">"${msg}"</div><div class="ts">${ts}</div>`;
-  list.insertBefore(d,list.firstChild);
+PROFIL VON ${p.name||'Person 1'}:
+- Liebessprache: ${LOVE_LABELS[p.love]||'nicht angegeben'}
+- Körperliche Intimität: ${p.intimacy==='high'?'sehr wichtig':p.intimacy==='medium'?'wichtig, ausgewogen':p.intimacy==='low'?'eher zweitrangig':p.intimacy==='varies'?'wechselnd':'nicht angegeben'}
+- Abneigungen/Grenzen: ${p.dislikes&&p.dislikes.length?p.dislikes.join(', '):'keine angegeben'}
+- Bei Stress braucht er/sie: ${STRESS_LABELS[p.stress]||'nicht angegeben'}
+- Romantische Vorlieben: ${p.romantic&&p.romantic.length?p.romantic.join(', '):'nicht angegeben'}
+${p.secret?`- Möchte dem Partner sagen: "${p.secret}" (vertraulich – nur wenn passend erwähnen)`:''} 
+
+GEMEINSAME SITUATION: Paar mit Kindern, wenig Zeit, Alltag belastet die Zweisamkeit.
+
+DEIN STIL:
+- Warm, direkt, nicht therapeutisch steif
+- Gib konkrete, umsetzbare Tipps
+- Berücksichtige immer das Profil – keine generischen Antworten
+- Auf Erotik-Fragen: sinnlich, respektvoll, nicht explizit/vulgär
+- Antworte auf Deutsch, kurz und klar (max 3 Absätze)
+- Nutze gelegentlich Emojis, aber sparsam
+- Du kennst ihre Geschichte, ihre Erschöpfung, ihre Sehnsucht`;
 }
 
-// ── IDEAS ─────────────────────────────────────────────────────────────────────
-function filterI(f,tab){
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); tab.classList.add('active');
-  curFilter=f; curInt=0;
-  const ir=document.getElementById('intRow');
-  ir.style.display=f==='erotic'?'flex':'none';
-  if(f==='erotic'){document.querySelectorAll('.ib').forEach((b,i)=>{b.classList.remove('a1','a2','a3');if(i===0)b.classList.add('a1');});}
-  renderI();
-}
-function setInt(l,btn){
-  document.querySelectorAll('.ib').forEach(b=>b.classList.remove('a1','a2','a3'));
-  btn.classList.add('a'+l); curInt=l; renderI();
-}
-function renderI(){
-  let list=IDEAS.filter(i=>curFilter==='all'||i.tags.includes(curFilter));
-  if(curFilter==='erotic'&&curInt>0) list=list.filter(i=>i.inten===curInt);
-  document.getElementById('iContainer').innerHTML=list.map((idea,idx)=>{
-    const er=idea.tags.includes('erotic');
-    return `<div class="ic ${er?'er':''}" onclick="openIdeaM(${IDEAS.indexOf(idea)})" style="animation-delay:${idx*.04}s">
-      <div class="ie">${idea.e}</div>
-      <div class="ico"><h4>${idea.t}</h4><p>${idea.d}</p>
-        <div class="itags">${idea.l.map((l,i)=>`<span class="itag ${i===0?(er?'pl':'r'):'g'}">${l}</span>`).join('')}</div>
-      </div></div>`;
-  }).join('');
-}
-function shuffleI(){
-  let list=IDEAS.filter(i=>curFilter==='all'||i.tags.includes(curFilter));
-  if(curFilter==='erotic'&&curInt>0) list=list.filter(i=>i.inten===curInt);
-  if(!list.length) return;
-  openIdeaM(IDEAS.indexOf(list[Math.floor(Math.random()*list.length)]));
-}
-function openIdeaM(idx){
-  const idea=IDEAS[idx], er=idea.tags.includes('erotic');
-  setM(`<div style="text-align:center;font-size:48px;margin-bottom:13px;">${idea.e}</div>
-    <div class="mt">${idea.t}</div><div class="ms">${idea.l.join(' · ')}</div>
-    <div class="mb">${idea.d}</div>
-    ${er?`<div style="margin-top:15px;padding:13px;background:rgba(122,58,92,.12);border-radius:12px;font-size:12px;color:var(--muted);line-height:1.6;">💬 <em>Immer im gegenseitigen Einverständnis – kommuniziert offen, was euch gut tut.</em></div>`:''}
-  `); openModal();
+async function sendToAI(){
+  const inp=document.getElementById('aiInput');
+  const msg=inp.value.trim();
+  if(!msg)return;
+  inp.value='';
+  askAI(msg);
 }
 
-// ── CHALLENGES ────────────────────────────────────────────────────────────────
-function renderCh(){
-  document.getElementById('chList').innerHTML=CHALLENGES.map((c,i)=>`
-    <div class="chi ${c.done?'done':''}" onclick="togCh(${i})">
-      <div class="chck">${c.done?'✓':''}</div>
-      <div class="cht"><h4>${c.e} ${c.t}</h4><p>${c.d}</p></div>
+async function askAI(msg){
+  addUserBubble(msg);
+  const typingEl=addTypingBubble();
+  chatHistory.push({role:'user',content:msg});
+
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        system:buildSystemPrompt(),
+        messages:chatHistory
+      })
+    });
+    const data=await res.json();
+    const text=data.content&&data.content[0]&&data.content[0].text||'Ich konnte leider keine Antwort generieren.';
+    typingEl.remove();
+    addAIBubble(text);
+    chatHistory.push({role:'assistant',content:text});
+  }catch(e){
+    typingEl.remove();
+    addAIBubble('Verbindungsfehler. Bitte prüft eure Internetverbindung.');
+  }
+}
+
+function addAIBubble(text){
+  const area=document.getElementById('chatArea');
+  const div=document.createElement('div');
+  div.className='ai-bubble ai';
+  // simple markdown bold
+  div.innerHTML=text.replace(/\*\*(.*?)\*\*/g,'<strong style="color:var(--rose-l)">$1</strong>').replace(/\n/g,'<br>');
+  area.appendChild(div);
+  area.scrollTop=area.scrollHeight;
+  return div;
+}
+function addUserBubble(text){
+  const area=document.getElementById('chatArea');
+  const div=document.createElement('div');
+  div.className='ai-bubble user';
+  div.textContent=text;
+  area.appendChild(div);
+  area.scrollTop=area.scrollHeight;
+}
+function addTypingBubble(){
+  const area=document.getElementById('chatArea');
+  const div=document.createElement('div');
+  div.className='ai-bubble ai';
+  div.innerHTML='<div class="typing"><span></span><span></span><span></span></div>';
+  area.appendChild(div);
+  area.scrollTop=area.scrollHeight;
+  return div;
+}
+
+// ════════════════════════════════════════════════
+// IDEAS
+// ════════════════════════════════════════════════
+function renderIdeas(filter='all'){
+  curFilter=filter;
+  const list=filter==='all'?IDEAS:IDEAS.filter(i=>i.tags.includes(filter));
+  document.getElementById('ideasList').innerHTML=list.map((idea,idx)=>`
+    <div class="idea-card ${idea.hot?'hot':''}" onclick="openIdeaModal(${IDEAS.indexOf(idea)})" style="animation-delay:${idx*.04}s">
+      <div class="idea-emoji">${idea.emoji}</div>
+      <div class="idea-content">
+        <h4>${idea.title}</h4><p>${idea.desc}</p>
+        <div class="idea-tags">${idea.labels.map((l,i)=>`<span class="itag ${i===0?(idea.hot?'h':'r'):'g'}">${l}</span>`).join('')}</div>
+      </div>
     </div>`).join('');
 }
-function togCh(i){CHALLENGES[i].done=!CHALLENGES[i].done; renderCh(); if(CHALLENGES[i].done) toast('✨ Erledigt! Wunderbar.');}
+function filterIdeas(f,tab){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  tab.classList.add('active');
+  renderIdeas(f);
+}
+function shuffleIdea(){
+  const list=curFilter==='all'?IDEAS:IDEAS.filter(i=>i.tags.includes(curFilter));
+  openIdeaModal(IDEAS.indexOf(list[Math.floor(Math.random()*list.length)]));
+}
+function openIdeaModal(idx){
+  const idea=IDEAS[idx];
+  setModal(`<div style="text-align:center;margin-bottom:13px;font-size:48px">${idea.emoji}</div>
+    <div class="m-title">${idea.title}</div>
+    <div class="m-sub">${idea.labels.join(' · ')}</div>
+    <div class="m-body">${idea.desc}</div>`);
+  openModal();
+}
 
-// ── TIMER ─────────────────────────────────────────────────────────────────────
+// ════════════════════════════════════════════════
+// CHALLENGES
+// ════════════════════════════════════════════════
+function renderChallenges(){
+  document.getElementById('chList').innerHTML=CHALLENGES.map((c,i)=>`
+    <div class="ch-item ${c.done?'done':''}" onclick="toggleChallenge(${i})">
+      <div class="ch-check">${c.done?'✓':''}</div>
+      <div class="ch-text"><h4>${c.emoji} ${c.title}</h4><p>${c.desc}</p></div>
+    </div>`).join('');
+}
+function toggleChallenge(i){
+  CHALLENGES[i].done=!CHALLENGES[i].done;
+  renderChallenges();
+  if(CHALLENGES[i].done)toast('✨ Erledigt! Gut gemacht.');
+}
+
+// ════════════════════════════════════════════════
+// TIMELINE
+// ════════════════════════════════════════════════
+function renderTimeline(){
+  document.getElementById('timelineContainer').innerHTML=memories.map(m=>`
+    <div class="tl-item">
+      <div class="tl-dot">${m.emoji}</div>
+      <div class="tl-content">
+        <div class="tl-date">${m.date}</div>
+        <div class="tl-title">${m.title}</div>
+        <div class="tl-desc">${m.desc}</div>
+      </div>
+    </div>`).join('');
+}
+
+// ════════════════════════════════════════════════
+// CHECK-IN
+// ════════════════════════════════════════════════
+function renderCheckin(){
+  const wrap=document.getElementById('checkinWrap');
+  let html='<div style="font-size:12px;font-weight:200;color:var(--muted);line-height:1.8;padding:0 0 16px">Jeder beantwortet diese 3 Fragen für sich. Die App zeigt euch dann, wo ihr harmoniert.</div>';
+  CHECKIN_QS.forEach((q,qi)=>{
+    html+=`<div class="ci-card"><div class="ci-q">${q.q}</div><div class="ci-scale">`;
+    q.scale.forEach((s,si)=>{
+      html+=`<div class="ci-dot ${checkinAnswers[qi]===si?'sel':''}" onclick="setCheckin(${qi},${si})">${s}</div>`;
+    });
+    html+=`</div></div>`;
+  });
+  html+=`<button class="ci-submit" onclick="submitCheckin()">Auswertung anzeigen ✦</button>`;
+  wrap.innerHTML=html;
+}
+function setCheckin(q,val){
+  checkinAnswers[q]=val;
+  renderCheckin();
+}
+function submitCheckin(){
+  const answered=checkinAnswers.filter(a=>a!==null).length;
+  if(answered<3){toast('Bitte alle 3 Fragen beantworten');return;}
+  const avg=(checkinAnswers.reduce((a,b)=>a+b,0)/3/4*100).toFixed(0);
+  let msg='';
+  if(avg>=80)msg='Diese Woche seid ihr sehr verbunden. Nutzt diesen Schwung für einen besonderen Moment! 🌹';
+  else if(avg>=50)msg='Solide Woche. Ein bisschen mehr bewusste Zweisamkeit würde euch gut tun. Schaut mal bei den Ideen vorbei. 💕';
+  else msg='Diese Woche war wohl herausfordernd. Das ist normal. Ein kleines Ritual kann viel bewirken – auch ein 6-Sekunden-Kuss. ♥';
+  document.getElementById('checkinWrap').innerHTML=`
+    <div class="ci-result">
+      <h3>${avg}% Verbundenheit</h3>
+      <p>${msg}</p>
+    </div>
+    <button class="btn-rose" style="width:100%;margin-top:10px" onclick="askAI('Unser Check-in zeigt ${avg}% Verbundenheit. Was empfiehlst du uns?')">KI fragen →</button>
+    <button class="btn-rose" style="width:100%;margin-top:9px;background:transparent;border-color:rgba(196,99,122,.2);color:var(--muted);font-size:11px" onclick="checkinAnswers=[null,null,null];renderCheckin()">Neu ausfüllen</button>`;
+}
+
+// ════════════════════════════════════════════════
+// TIMER
+// ════════════════════════════════════════════════
 function setTimer(m,btn){
-  document.querySelectorAll('.tp').forEach(b=>b.classList.remove('active')); btn.classList.add('active');
-  tDur=m*60; tRem=tDur; clearInterval(tIv); tIv=null; tRun=false;
-  document.getElementById('tBtn').textContent='▶'; updTimer();
+  document.querySelectorAll('.tpr').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  timerDur=m*60;timerRem=timerDur;
+  if(timerIv){clearInterval(timerIv);timerIv=null;timerRunning=false;}
+  document.getElementById('timerBtn').textContent='▶';
+  updateTimerUI();
 }
 function toggleTimer(){
-  if(tRun){clearInterval(tIv);tIv=null;tRun=false;document.getElementById('tBtn').textContent='▶';}
-  else{tRun=true;document.getElementById('tBtn').textContent='⏸';
-    tIv=setInterval(()=>{tRem--;updTimer();if(tRem<=0){clearInterval(tIv);tRun=false;document.getElementById('tBtn').textContent='▶';toast('⏱ Zeit ist um – genießt noch einen Moment 💕');}},1000);}
+  if(timerRunning){
+    clearInterval(timerIv);timerIv=null;timerRunning=false;
+    document.getElementById('timerBtn').textContent='▶';
+  }else{
+    timerRunning=true;document.getElementById('timerBtn').textContent='⏸';
+    timerIv=setInterval(()=>{
+      timerRem--;updateTimerUI();
+      if(timerRem<=0){clearInterval(timerIv);timerRunning=false;document.getElementById('timerBtn').textContent='▶';toast('⏱ Eure Zeit ist um – genießt noch einen Moment 💕');}
+    },1000);
+  }
 }
-function resetTimer(){clearInterval(tIv);tIv=null;tRun=false;tRem=tDur;document.getElementById('tBtn').textContent='▶';updTimer();}
-function updTimer(){
-  const m=Math.floor(tRem/60).toString().padStart(2,'0'), s=(tRem%60).toString().padStart(2,'0');
-  document.getElementById('tDisp').textContent=`${m}:${s}`;
-  document.getElementById('rProg').style.strokeDashoffset=615.7*(1-tRem/tDur);
+function resetTimer(){clearInterval(timerIv);timerIv=null;timerRunning=false;timerRem=timerDur;document.getElementById('timerBtn').textContent='▶';updateTimerUI();}
+function updateTimerUI(){
+  const m=Math.floor(timerRem/60).toString().padStart(2,'0');
+  const s=(timerRem%60).toString().padStart(2,'0');
+  document.getElementById('timerDisplay').textContent=`${m}:${s}`;
+  document.getElementById('ringProg').style.strokeDashoffset=590.6*(1-timerRem/timerDur);
 }
-function pickAct(n,e){document.getElementById('tActivity').textContent=`${e} ${n}`;toast(`${e} ${n} gewählt – Timer starten!`);}
 
-// ── MODAL CONTENT ─────────────────────────────────────────────────────────────
+// ════════════════════════════════════════════════
+// CONNECT ROOM
+// ════════════════════════════════════════════════
+const PARTNER_NAMES=['Lena','Emma','Sophie','Jonas','Max','Leo','Mia','Anna','Clara','Tim'];
+const PARTNER_MOODS=['Entspannt 🌙','Verliebt 🌹','Sehnsüchtig 🔥','Glücklich ✨','Zärtlich 💕','Nachdenklich 💬'];
+
+function joinRoom(){
+  const n=document.getElementById('roomName').value.trim();
+  const c=document.getElementById('roomCode').value.trim();
+  if(!n||!c){toast('Bitte Name und Code eingeben');return;}
+  myName=n;roomCode=c;activateRoom();
+}
+function demoRoom(){
+  myName=profile.name||'Du';roomCode='demo';activateRoom();
+  setTimeout(()=>receiveSignal('💋','Ein Kuss von deinem Schatz','Gerade an dich gedacht ♥'),4000);
+}
+function activateRoom(){
+  const pName=PARTNER_NAMES[Math.floor(Math.random()*PARTNER_NAMES.length)];
+  document.getElementById('roomSetup').style.display='none';
+  document.getElementById('connState').style.display='block';
+  document.getElementById('pName').textContent=pName;
+  document.getElementById('pMood').textContent='Stimmung: '+PARTNER_MOODS[Math.floor(Math.random()*PARTNER_MOODS.length)];
+  document.getElementById('myBarName').textContent=myName;
+  document.getElementById('pBarName').textContent=pName;
+  connected=true;
+  document.getElementById('connPill').classList.add('on');
+  document.getElementById('connDot').style.background='var(--green)';
+  document.getElementById('connLabel').textContent='Verbunden · '+roomCode;
+  document.getElementById('connBadge').style.display='block';
+  addMsg('💕 Willkommen in eurem gemeinsamen Raum',false);
+  toast('Verbunden ♥');
+  activateFades();
+}
+function leaveRoom(){
+  document.getElementById('roomSetup').style.display='block';
+  document.getElementById('connState').style.display='none';
+  document.getElementById('roomName').value='';document.getElementById('roomCode').value='';
+  connected=false;
+  document.getElementById('connPill').classList.remove('on');
+  document.getElementById('connLabel').textContent='Nicht verbunden';
+  document.getElementById('connBadge').style.display='none';
+  if(syncIv){clearInterval(syncIv);syncIv=null;syncRunning=false;}
+}
+function setDesire(pct){
+  document.getElementById('myBar').style.width=pct+'%';
+  const labels={20:'Ruhig & entspannt',50:'Zärtlich gestimmt',75:'Romantisch',100:'Sehr sehnsüchtig'};
+  toast('Stimmung geteilt: '+labels[pct]+' 🌹');
+}
+function sendSig(emoji,title,msg){
+  toast('Signal gesendet '+emoji);
+  setTimeout(()=>toast('💞 Empfangen!'),1600);
+}
+function receiveSignal(emoji,title,msg){
+  document.getElementById('sigEmo').textContent=emoji;
+  document.getElementById('sigTitle').textContent=title;
+  document.getElementById('sigMsg').textContent=msg;
+  document.getElementById('incSignal').classList.add('show');
+}
+function dismissSig(){document.getElementById('incSignal').classList.remove('show');toast('💕 Geborgen empfangen');}
+let syncIvLocal=null;
+function startSync(){
+  if(syncRunning)return;syncRunning=true;syncRem=600;
+  toast('⏱ Synchroner Timer gestartet');
+  syncIvLocal=setInterval(()=>{
+    syncRem--;
+    const m=Math.floor(syncRem/60).toString().padStart(2,'0');
+    const s=(syncRem%60).toString().padStart(2,'0');
+    document.getElementById('syncDisplay').textContent=`${m}:${s}`;
+    if(syncRem<=0){clearInterval(syncIvLocal);syncRunning=false;document.getElementById('syncDisplay').textContent='10:00';toast('✨ Eure Zeit ist um 💕');}
+  },1000);
+}
+const REPLIES=['💕','Ich denke auch an dich ♥','Das klingt wunderbar 🌹','Ich freue mich auf heute Abend','Du machst mich glücklich ✨','❤️‍🔥'];
+function sendMsg(){
+  const inp=document.getElementById('msgInput');
+  const txt=inp.value.trim();if(!txt)return;inp.value='';
+  addMsg(txt,true);
+  if(connected)setTimeout(()=>addMsg(REPLIES[Math.floor(Math.random()*REPLIES.length)],false),1200+Math.random()*1800);
+}
+function addMsg(text,mine){
+  const area=document.getElementById('msgArea');
+  const div=document.createElement('div');
+  div.className='msg '+(mine?'mine':'theirs');
+  div.textContent=text;
+  area.appendChild(div);area.scrollTop=area.scrollHeight;
+}
+
+// ════════════════════════════════════════════════
+// MODALS
+// ════════════════════════════════════════════════
 const MODALS={
   question:()=>{
-    const q=QS[Math.floor(Math.random()*QS.length)];
-    return `<div style="text-align:center;font-size:40px;margin-bottom:13px;">💬</div>
-      <div class="mt">Frage für euch</div><div class="ms">Nehmt euch Zeit – wirklich zuhören</div>
-      <div class="mb" style="font-family:'Cormorant Garamond',serif;font-size:1.18rem;font-style:italic;color:var(--cream);line-height:1.6;">"${q}"</div>`;
+    const q=QUESTIONS[Math.floor(Math.random()*QUESTIONS.length)];
+    return `<div style="text-align:center;font-size:42px;margin-bottom:13px">💬</div>
+      <div class="m-title">Frage für euch</div><div class="m-sub">Nehmt euch Zeit, wirklich zuzuhören</div>
+      <div class="m-body" style="font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-style:italic;color:var(--cream)">"${q}"</div>`;
   },
-  kiss:()=>`<div style="text-align:center;font-size:44px;margin-bottom:13px;">💋</div>
-    <div class="mt">Das 6-Sekunden-Kuss-Ritual</div><div class="ms">Nach Dr. John Gottman, Paartherapeut</div>
-    <div class="mb">Ein echter Kuss – mindestens 6 Sekunden lang. Nicht der schnelle Abschiedskuss, sondern einer, der sagt: <em style="color:var(--rose-light);">„Ich bin hier. Ich liebe dich."</em><br><br>
-    6 Sekunden reichen, um Oxytocin freizusetzen und eine echte emotionale Verbindung herzustellen. Probiert es jetzt.<br><br>
-    <strong style="color:var(--cream);">Jeden Morgen + jeden Abend</strong> – als festes Ritual.</div>`,
-  wishMatch:()=>{
-    WISHES.forEach(w=>{if(!(w in wish))wish[w]=[false,false];});
-    const half=Math.ceil(WISHES.length/2);
-    const col=(arr,person)=>arr.map(w=>`
-      <div class="wi ${wish[w]?.[person]?'chk':''}" onclick="togWish('${w}',${person})">
-        <div class="wbox">${wish[w]?.[person]?'✓':''}</div><p>${w}</p>
-      </div>`).join('');
-    const matched=WISHES.filter(w=>wish[w]?.[0]&&wish[w]?.[1]);
-    return `<div style="text-align:center;font-size:44px;margin-bottom:13px;">🔥</div>
-      <div class="mt">Wunsch-Match</div>
-      <div class="ms">Wählt unabhängig – was übereinstimmt, wird heute erfüllt</div>
-      <div class="wm">
-        <div class="wc"><h5>Ich möchte</h5>${col(WISHES.slice(0,half),0)}</div>
-        <div class="wc"><h5>Ich möchte</h5>${col(WISHES.slice(half),1)}</div>
-      </div>
-      ${matched.length?`<div style="margin-top:13px;padding:12px;background:rgba(196,99,122,.1);border-radius:12px;font-size:12px;color:var(--rose-light);line-height:1.6;">🎉 Übereinstimmung: <strong>${matched.join(', ')}</strong></div>`:''}
-      <div style="margin-top:10px;padding:12px;background:rgba(255,255,255,.03);border-radius:12px;font-size:12px;color:var(--muted);line-height:1.6;">💬 Zeigt euch gegenseitig eure Auswahl – und besprecht es offen. Nur was beide wollen, passiert.</div>`;
-  },
-  timerTips:()=>`<div style="text-align:center;font-size:40px;margin-bottom:13px;">✨</div>
-    <div class="mt">Ideen für eure Zeit</div><div class="ms">Was passt heute zu euch?</div>
-    <div class="mb">
-      🕯️ Kerzen, leise Musik, einfach beieinander sein<br><br>
-      🍷 Zusammen etwas trinken und erzählen<br><br>
-      ✋ Füße oder Rücken massieren<br><br>
-      💋 Bewusst küssen – ohne Eile<br><br>
-      🫶 Den anderen einfach halten<br><br>
-      🌹 Playlist: unsere Songs zusammenstellen
-    </div>`,
+  kiss:()=>`<div style="text-align:center;font-size:42px;margin-bottom:13px">💋</div>
+    <div class="m-title">Der 6-Sekunden-Kuss</div><div class="m-sub">Nicht der schnelle Abschiedskuss – ein echter</div>
+    <div class="m-body"><p>Küsst euch jetzt. Mindestens <strong style="color:var(--rose-l)">6 Sekunden</strong> lang.</p><p>Dr. John Gottman fand heraus: 6 Sekunden senken Cortisol messbar und stärken die Bindung. Macht es täglich.</p></div>`,
+  whisper:()=>`<div style="text-align:center;font-size:42px;margin-bottom:13px">🌙</div>
+    <div class="m-title">Flüstern</div><div class="m-sub">Etwas, das nur für euren Partner ist</div>
+    <div class="m-body"><p>Was möchtest du deinem Partner heute flüstern? Schreib es ins Chat-Feld – nur für ihn/sie.</p></div>`,
+  timerTip:()=>`<div style="text-align:center;font-size:42px;margin-bottom:13px">✦</div>
+    <div class="m-title">Ideen für eure Zeit</div><div class="m-sub">Was passt heute?</div>
+    <div class="m-body"><p>• Bei Kerzenlicht zusammensitzen</p><p>• Einen Wein teilen, erzählen</p><p>• Fußmassage tauschen</p><p>• Eine Playlist für euch erstellen</p><p>• Fotos von früher ansehen</p></div>`,
+  addMemory:()=>`<div style="text-align:center;font-size:42px;margin-bottom:13px">📖</div>
+    <div class="m-title">Erinnerung hinzufügen</div><div class="m-sub">Ein Moment, der bleibt</div>
+    <div class="emoji-pick">
+      ${['💍','🌅','🌧️','✈️','👶','🎉','🌹','💋','🎂','🏠'].map(e=>`<span class="ep" onclick="selectEmoji(this,'${e}')">${e}</span>`).join('')}
+    </div>
+    <input class="mem-input" id="memTitle" placeholder="Titel (z.B. Unser erster Urlaub)"/>
+    <input class="mem-input" id="memDesc" placeholder="Was macht diesen Moment besonders?"/>
+    <input class="mem-input" id="memDate" placeholder="Datum (z.B. Sommer 2023)"/>
+    <button class="btn-rose" onclick="saveMemory()">Erinnerung speichern ♥</button>`,
 };
-
-function togWish(item,person){
-  wish[item]=wish[item]||[false,false];
-  wish[item][person]=!wish[item][person];
-  setM(MODALS.wishMatch()); openModal();
+let selectedEmoji='💕';
+function selectEmoji(el,e){document.querySelectorAll('.ep').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');selectedEmoji=e;}
+function saveMemory(){
+  const t=document.getElementById('memTitle').value.trim();
+  const d=document.getElementById('memDesc').value.trim();
+  const dt=document.getElementById('memDate').value.trim();
+  if(!t){toast('Bitte einen Titel eingeben');return;}
+  memories.unshift({emoji:selectedEmoji,title:t,desc:d||'Ein besonderer Moment',date:dt||'Kürzlich'});
+  renderTimeline();closeModal();toast('Erinnerung gespeichert 💕');
+}
+function setModal(html){document.getElementById('modalContent').innerHTML=html;}
+function openModal(key){
+  if(key&&MODALS[key])setModal(MODALS[key]());
+  document.getElementById('modalOverlay').classList.add('open');
+}
+function closeModal(e){
+  if(!e||e.target===document.getElementById('modalOverlay')||!e)
+    document.getElementById('modalOverlay').classList.remove('open');
 }
 
-function setM(html){document.getElementById('mContent').innerHTML=html;}
-function openModal(key){if(key&&MODALS[key])setM(MODALS[key]());document.getElementById('overlay').classList.add('open');}
-function closeModal(e){if(!e||e.target===document.getElementById('overlay')||!e)document.getElementById('overlay').classList.remove('open');}
-
+// ════════════════════════════════════════════════
+// TOAST
+// ════════════════════════════════════════════════
 function toast(msg){
   const t=document.getElementById('toastEl');
-  t.textContent=msg; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2600);
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
 }
-// alias
-function openM(k){openModal(k);}
+
+// ════════════════════════════════════════════════
+// BOOT
+// ════════════════════════════════════════════════
+(function(){
+  const saved=localStorage.getItem('unszeit_profile');
+  if(saved){
+    try{profile=JSON.parse(saved);document.getElementById('onboarding').classList.add('hidden');initApp();}
+    catch(e){/* fresh start */}
+  }
+  if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+})();
 </script>
 </body>
 </html>
