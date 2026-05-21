@@ -927,7 +927,7 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:100;display:flex;justify-cont
   <!-- About -->
   <div class="about-box">
     <div class="about-logo">uns♥zeit</div>
-    <div class="about-version">Version 1.3 · Mai 2026</div>
+    <div class="about-version">Version 1.4 · Mai 2026</div>
     <div class="about-divider"></div>
     <div class="about-dev">
       Entwickelt mit ♥ von<br>
@@ -981,7 +981,7 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:100;display:flex;justify-cont
 let profile = {name:'',love:'',intimacy:'',dislikes:[],stress:'',romantic:[],secret:''};
 let myMood = '';
 let connected = false, myName = '', roomCode = '';
-let syncIv = null, syncRem = 600, syncRunning = false;
+let syncIvLocal = null, syncRem = 600, syncRunning = false;
 let timerDur = 300, timerRem = 300, timerIv = null, timerRunning = false;
 let curFilter = 'all';
 let chatHistory = [];
@@ -1708,7 +1708,7 @@ function showIncomingSignal(emoji,title,msg){
 function dismissSig(){document.getElementById('incSignal').classList.remove('show');toast('💕 Geborgen empfangen');}
 
 // ── Sync Timer ──
-let syncIvLocal=null, syncRunning=false, syncRem=600;
+// (syncIvLocal, syncRunning, syncRem declared in STATE block above)
 
 function startSync(){
   if(syncRunning) return;
@@ -1796,7 +1796,7 @@ function clearMsgArea(){
 // ════════════════════════════════════════════════
 // API KEY MANAGEMENT
 // ════════════════════════════════════════════════
-const APP_VERSION = '1.3';
+const APP_VERSION = '1.4';
 const APP_MONTH   = 'Mai';
 const APP_YEAR    = '2026';
 const APP_DEV     = 'René Prause';
